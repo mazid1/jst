@@ -15,7 +15,9 @@
     "lint": "nx workspace-lint && npx nx run-many --all --target=lint --parallel",
     "format:check": "nx format:check",
     "format:write": "nx format:write",
-    "e2e": "nx e2e client-e2e"
+    "e2e": "nx e2e client-e2e",
+    "up": "docker-compose up -d",
+    "down": "docker-compose down"
   },
   "private": true,
   "dependencies": {
