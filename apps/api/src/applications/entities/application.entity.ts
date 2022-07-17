@@ -3,7 +3,9 @@ import mongoose, { Document } from 'mongoose';
 import { ApplicationStatus } from '../enums/application-status.enum';
 import { Link } from '../interfaces/link.interface';
 
-@Schema()
+@Schema({
+  timestamps: true,
+})
 export class Application extends Document {
   @Prop({ required: true })
   position: string;
@@ -30,9 +32,6 @@ export class Application extends Document {
     })
   )
   source: Link;
-
-  @Prop()
-  createdDate: Date;
 
   @Prop()
   appliedDate: Date;
