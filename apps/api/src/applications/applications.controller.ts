@@ -7,31 +7,34 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
+import { ApplicationsService } from './applications.service';
 
 @Controller('applications')
 export class ApplicationsController {
+  constructor(private readonly applicationService: ApplicationsService) {}
+
   @Get()
   findAll() {
-    return 'All applications';
+    return this.applicationService.findAll();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return 'Application ID = ' + id;
+    return this.applicationService.findOne(id);
   }
 
   @Post()
   create(@Body() createApplicationDto) {
-    return 'Application Created! ' + createApplicationDto;
+    return this.applicationService.create(createApplicationDto);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateApplicationDto) {
-    return `Application with ID ${id} updated! ` + updateApplicationDto;
+    return this.applicationService.update(id, updateApplicationDto);
   }
 
   @Delete(':id')
-  delete(@Param('id') id: string) {
-    return `Application ${id} deleted!`;
+  remove(@Param('id') id: string) {
+    return this.applicationService.remove(id);
   }
 }
