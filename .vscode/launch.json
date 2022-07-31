@@ -1,0 +1,30 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Attach to Server",
+      "port": 9229,
+      "restart": true,
+      "request": "attach",
+      "type": "node"
+    },
+    {
+      "name": "Launch Server",
+      "command": "yarn run start:api",
+      "request": "launch",
+      "type": "node-terminal",
+      "envFile": "${workspaceFolder}/.env",
+      "cwd": "${workspaceFolder}/apps/api"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Debug:Server",
+      "configurations": ["Launch Server", "Attach to Server"],
+      "stopAll": true
+    }
+  ],
+}
