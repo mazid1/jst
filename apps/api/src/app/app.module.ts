@@ -3,8 +3,6 @@ import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import * as Joi from 'joi';
 import { ApplicationsModule } from '../applications/applications.module';
-import { AuthModule } from '../auth/auth.module';
-import { UsersModule } from '../users/users.module';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -22,8 +20,6 @@ import { AppService } from './app.service';
       'mongodb://admin:pass1234@localhost:27017/jst?authMechanism=DEFAULT&authSource=admin'
     ),
     ApplicationsModule,
-    AuthModule,
-    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
