@@ -5,6 +5,7 @@ export function App() {
     onSuccess: (codeResponse) => console.log(codeResponse),
     onError: (err) => console.log(err),
     flow: 'auth-code',
+    scope: 'openid email profile https://www.googleapis.com/auth/drive.appdata',
   });
 
   return (
