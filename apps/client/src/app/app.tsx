@@ -1,8 +1,7 @@
 import { CodeResponse, useGoogleLogin } from '@react-oauth/google';
 
 export function App() {
-  const onSuccess = async (codeResponse: CodeResponse) => {
-    console.log(codeResponse);
+  const onLoginSuccess = async (codeResponse: CodeResponse) => {
     const { code } = codeResponse;
     const response = await fetch('/api/auth/google-login', {
       method: 'POST',
@@ -11,12 +10,12 @@ export function App() {
       },
       body: JSON.stringify({ code }),
     });
-    const data = await response.json();
-    console.log(data);
+    const userInfo = await response.json();
+    console.log(userInfo);
   };
 
   const login = useGoogleLogin({
-    onSuccess,
+    onSuccess: onLoginSuccess,
     onError: (err) => console.log(err),
     flow: 'auth-code',
     scope: 'openid email profile https://www.googleapis.com/auth/drive.appdata',

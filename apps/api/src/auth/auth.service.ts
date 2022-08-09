@@ -6,14 +6,14 @@ import { CodeDto } from './dtos/code.dto';
 
 @Injectable()
 export class AuthService {
-  googleClient: Auth.OAuth2Client;
+  oauth2Client: Auth.OAuth2Client;
 
   constructor(
     private readonly configService: ConfigService<EnvironmentVariables>
   ) {
     const clientId = this.configService.get('NX_GOOGLE_CLIENT_ID');
     const clientSecret = this.configService.get('NX_GOOGLE_CLIENT_SECRET');
-    this.googleClient = new google.auth.OAuth2(
+    this.oauth2Client = new google.auth.OAuth2(
       clientId,
       clientSecret,
       'postmessage'
@@ -23,8 +23,20 @@ export class AuthService {
   async getGoogleToken(codeDto: CodeDto) {
     const { code } = codeDto;
     try {
-      const tokenResponse = await this.googleClient.getToken(code);
-      return tokenResponse;
+      const tokenResponse = await this.oauth2Client.getToken(code);
+      this.oauth2Client.setCredentials(tokenResponse.tokens);
+      return this.getUserInfo();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async getUserInfo() {
+    try {
+      const userInfoResponse = await google
+        .oauth2('v2')
+        .userinfo.get({ auth: this.oauth2Client });
+      return userInfoResponse.data;
     } catch (error) {
       console.log(error);
     }
