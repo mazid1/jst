@@ -20,22 +20,16 @@ export class AuthService {
     );
   }
 
-  async getGoogleToken(codeDto: CodeDto) {
+  async loginWithGoogle(codeDto: CodeDto) {
     const { code } = codeDto;
     try {
       const tokenResponse = await this.oauth2Client.getToken(code);
       this.oauth2Client.setCredentials(tokenResponse.tokens);
-      return this.getUserInfo();
-    } catch (error) {
-      console.log(error);
-    }
-  }
 
-  async getUserInfo() {
-    try {
       const userInfoResponse = await google
         .oauth2('v2')
         .userinfo.get({ auth: this.oauth2Client });
+
       return userInfoResponse.data;
     } catch (error) {
       console.log(error);

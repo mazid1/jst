@@ -8,6 +8,6 @@ export class AuthController {
 
   @Post('google-login')
   googleLogin(@Body() codeDto: CodeDto) {
-    return this.authService.getGoogleToken(codeDto);
+    return this.authService.loginWithGoogle(codeDto);
   }
 }
