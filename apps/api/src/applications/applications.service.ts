@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { CreateApplicationDto } from './dtos/create-application.dto';
 import { Application } from './entities/application.entity';
 
 @Injectable()
@@ -22,7 +23,7 @@ export class ApplicationsService {
     return application;
   }
 
-  create(createApplicationDto) {
+  create(createApplicationDto: CreateApplicationDto) {
     const application = new this.applicationModel(createApplicationDto);
     return application.save();
   }
