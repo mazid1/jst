@@ -11,13 +11,13 @@ export class GoogleUserService {
     private readonly googleUserModel: Model<GoogleUser>
   ) {}
 
-  async findOne(id: string) {
+  async findOneByExternalId(externalId: string) {
     const googleUser = await this.googleUserModel
-      .findOne({ externalId: id })
+      .findOne({ externalId: externalId })
       .exec();
     if (!googleUser) {
       throw new NotFoundException(
-        `GoogleUser with externalId #${id} not found`
+        `GoogleUser with externalId #${externalId} not found`
       );
     }
     return googleUser;

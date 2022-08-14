@@ -1,14 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Auth, google } from 'googleapis';
 import { EnvironmentVariables } from '../config/environment-variables.interface';
 import { CreateGoogleUserDto } from '../user/dtos/create-google-user.dto';
+import { GoogleUser } from '../user/entities/google-user.entity';
+import { User } from '../user/entities/user.entity';
 import { GoogleUserService } from '../user/google-user.service';
 import { UserService } from '../user/user.service';
 import { CodeDto } from './dtos/code.dto';
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
+
   oauth2Client: Auth.OAuth2Client;
 
   constructor(
@@ -30,7 +34,6 @@ export class AuthService {
     try {
       const tokenResponse = await this.oauth2Client.getToken(code);
       this.oauth2Client.setCredentials(tokenResponse.tokens);
-      console.log(tokenResponse.tokens);
 
       const userInfoResponse = await google
         .oauth2('v2')
@@ -38,38 +41,39 @@ export class AuthService {
 
       const googleUserData = userInfoResponse.data;
 
-      let googleUserFromDB;
+      let googleUserFromDB: GoogleUser;
       try {
-        googleUserFromDB = await this.googleUserService.findOne(
+        googleUserFromDB = await this.googleUserService.findOneByExternalId(
           googleUserData.id
         );
       } catch (notFoundException) {
-        console.log(notFoundException);
-      }
-
-      if (!googleUserFromDB) {
-        console.log(
+        this.logger.log(
           `GoogleUser #${googleUserData.id} not found, creating new one.`
         );
-        const newGoogleUser = await this.googleUserService.create({
+        googleUserFromDB = await this.googleUserService.create({
           ...(googleUserData as CreateGoogleUserDto),
           externalId: googleUserData.id,
           tokens: { ...tokenResponse.tokens },
         });
-
-        // todo: find first, and then create user
-        const newUser = await this.userService.create({
-          name: newGoogleUser.name,
-          email: newGoogleUser.email,
-          googleUser: newGoogleUser.id,
-        });
-
-        return newUser;
       }
 
-      return googleUserFromDB;
+      let userFromDB: User;
+      try {
+        userFromDB = await this.userService.findOneByGoogleUserId(
+          googleUserFromDB.id
+        );
+      } catch (error) {
+        this.logger.log(error);
+        userFromDB = await this.userService.create({
+          name: googleUserFromDB.name,
+          email: googleUserFromDB.email,
+          googleUser: googleUserFromDB.id,
+        });
+      }
+
+      return userFromDB;
     } catch (error) {
-      console.log(error);
+      this.logger.log(error);
     }
   }
 }
