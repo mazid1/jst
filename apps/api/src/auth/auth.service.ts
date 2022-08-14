@@ -4,6 +4,7 @@ import { Auth, google } from 'googleapis';
 import { EnvironmentVariables } from '../config/environment-variables.interface';
 import { CreateGoogleUserDto } from '../user/dtos/create-google-user.dto';
 import { GoogleUserService } from '../user/google-user.service';
+import { UserService } from '../user/user.service';
 import { CodeDto } from './dtos/code.dto';
 
 @Injectable()
@@ -12,7 +13,8 @@ export class AuthService {
 
   constructor(
     private readonly configService: ConfigService<EnvironmentVariables>,
-    private readonly googleUserService: GoogleUserService
+    private readonly googleUserService: GoogleUserService,
+    private readonly userService: UserService
   ) {
     const clientId = this.configService.get('NX_GOOGLE_CLIENT_ID');
     const clientSecret = this.configService.get('NX_GOOGLE_CLIENT_SECRET');
@@ -54,7 +56,15 @@ export class AuthService {
           externalId: googleUserData.id,
           tokens: { ...tokenResponse.tokens },
         });
-        return newGoogleUser;
+
+        // todo: find first, and then create user
+        const newUser = await this.userService.create({
+          name: newGoogleUser.name,
+          email: newGoogleUser.email,
+          googleUser: newGoogleUser.id,
+        });
+
+        return newUser;
       }
 
       return googleUserFromDB;
