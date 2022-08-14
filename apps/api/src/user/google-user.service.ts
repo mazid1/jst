@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { GoogleUserDto } from './dtos/google-user.dto';
+import { CreateGoogleUserDto } from './dtos/create-google-user.dto';
 import { GoogleUser } from './entities/google-user.entity';
 
 @Injectable()
@@ -23,7 +23,7 @@ export class GoogleUserService {
     return googleUser;
   }
 
-  create(googleUserDto: GoogleUserDto) {
+  create(googleUserDto: CreateGoogleUserDto) {
     const googleUser = new this.googleUserModel(googleUserDto);
     return googleUser.save();
   }

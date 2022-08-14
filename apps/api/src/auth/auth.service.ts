@@ -1,8 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Auth, google } from 'googleapis';
 import { EnvironmentVariables } from '../config/environment-variables.interface';
-import { GoogleUserDto } from '../user/dtos/google-user.dto';
+import { CreateGoogleUserDto } from '../user/dtos/create-google-user.dto';
 import { GoogleUserService } from '../user/google-user.service';
 import { CodeDto } from './dtos/code.dto';
 
@@ -34,12 +34,12 @@ export class AuthService {
         .oauth2('v2')
         .userinfo.get({ auth: this.oauth2Client });
 
-      const googleUserDto = userInfoResponse.data;
+      const googleUserData = userInfoResponse.data;
 
       let googleUserFromDB;
       try {
         googleUserFromDB = await this.googleUserService.findOne(
-          googleUserDto.id
+          googleUserData.id
         );
       } catch (notFoundException) {
         console.log(notFoundException);
@@ -47,15 +47,12 @@ export class AuthService {
 
       if (!googleUserFromDB) {
         console.log(
-          `GoogleUser #${googleUserDto.id} not found, creating new one.`
+          `GoogleUser #${googleUserData.id} not found, creating new one.`
         );
         const newGoogleUser = await this.googleUserService.create({
-          ...(googleUserDto as GoogleUserDto),
-          externalId: googleUserDto.id,
-          tokens: {
-            access_token: tokenResponse.tokens.access_token || '',
-            refresh_token: tokenResponse.tokens.refresh_token || '',
-          },
+          ...(googleUserData as CreateGoogleUserDto),
+          externalId: googleUserData.id,
+          tokens: { ...tokenResponse.tokens },
         });
         return newGoogleUser;
       }
