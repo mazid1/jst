@@ -3,8 +3,6 @@ import { ConfigService } from '@nestjs/config';
 import { Auth, google } from 'googleapis';
 import { EnvironmentVariables } from '../config/environment-variables.interface';
 import { CreateGoogleUserDto } from '../user/dtos/create-google-user.dto';
-import { GoogleUser } from '../user/entities/google-user.entity';
-import { User } from '../user/entities/user.entity';
 import { GoogleUserService } from '../user/google-user.service';
 import { UserService } from '../user/user.service';
 import { CodeDto } from './dtos/code.dto';
@@ -41,35 +39,17 @@ export class AuthService {
 
       const googleUserData = userInfoResponse.data;
 
-      let googleUserFromDB: GoogleUser;
-      try {
-        googleUserFromDB = await this.googleUserService.findOneByExternalId(
-          googleUserData.id
-        );
-      } catch (notFoundException) {
-        this.logger.log(
-          `GoogleUser #${googleUserData.id} not found, creating new one.`
-        );
-        googleUserFromDB = await this.googleUserService.create({
-          ...(googleUserData as CreateGoogleUserDto),
-          externalId: googleUserData.id,
-          tokens: { ...tokenResponse.tokens },
-        });
-      }
+      const googleUserFromDB = await this.googleUserService.findOneOrCreate({
+        ...(googleUserData as CreateGoogleUserDto),
+        externalId: googleUserData.id,
+        tokens: { ...tokenResponse.tokens },
+      });
 
-      let userFromDB: User;
-      try {
-        userFromDB = await this.userService.findOneByGoogleUserId(
-          googleUserFromDB.id
-        );
-      } catch (error) {
-        this.logger.log(error);
-        userFromDB = await this.userService.create({
-          name: googleUserFromDB.name,
-          email: googleUserFromDB.email,
-          googleUser: googleUserFromDB.id,
-        });
-      }
+      const userFromDB = await this.userService.findOneOrCreate({
+        name: googleUserFromDB.name,
+        email: googleUserFromDB.email,
+        googleUser: googleUserFromDB.id,
+      });
 
       return userFromDB;
     } catch (error) {

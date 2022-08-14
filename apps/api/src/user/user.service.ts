@@ -18,6 +18,15 @@ export class UserService {
     return user;
   }
 
+  async findOneOrCreate(createUserDto: CreateUserDto) {
+    try {
+      return await this.findOneByGoogleUserId(createUserDto.googleUser);
+    } catch (error) {
+      this.logger.log(`${error}, creating new one`);
+      return await this.create(createUserDto);
+    }
+  }
+
   async findOneByGoogleUserId(googleUserId: string) {
     const user = await this.userModel
       .findOne({ googleUser: googleUserId }, '-googleUser')
