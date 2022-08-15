@@ -16,9 +16,11 @@ import { JwtStrategy } from './jwt.strategy';
       useFactory: async (
         configService: ConfigService<EnvironmentVariables>
       ) => ({
-        secret: configService.get('NX_JWT_SECRET'),
+        secret: configService.get('NX_JWT_ACCESS_TOKEN_SECRET'),
         signOptions: {
-          expiresIn: `${configService.get('NX_JWT_EXPIRATION_TIME')}s`,
+          expiresIn: `${configService.get(
+            'NX_JWT_ACCESS_TOKEN_EXPIRATION_TIME'
+          )}s`,
         },
       }),
     }),

@@ -16,8 +16,10 @@ import { AppService } from './app.service';
       validationSchema: Joi.object({
         NX_GOOGLE_CLIENT_ID: Joi.string().required(),
         NX_GOOGLE_CLIENT_SECRET: Joi.string().required(),
-        NX_JWT_SECRET: Joi.string().required(),
-        NX_JWT_EXPIRATION_TIME: Joi.string().required(),
+        NX_JWT_ACCESS_TOKEN_SECRET: Joi.string().required(),
+        NX_JWT_ACCESS_TOKEN_EXPIRATION_TIME: Joi.number().required(),
+        NX_JWT_REFRESH_TOKEN_SECRET: Joi.string().required(),
+        NX_JWT_REFRESH_TOKEN_EXPIRATION_TIME: Joi.number().required(),
       }),
     }),
     MongooseModule.forRoot(

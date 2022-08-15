@@ -64,7 +64,7 @@ export class AuthService {
     const payload: TokenPayloadDto = { userId: id };
     const token = this.jwtService.sign(payload);
     return `Authentication=${token}; HttpOnly; Path=/; Secure; Max-Age=${this.configService.get(
-      'NX_JWT_EXPIRATION_TIME'
+      'NX_JWT_ACCESS_TOKEN_EXPIRATION_TIME'
     )}`;
   }
 }
