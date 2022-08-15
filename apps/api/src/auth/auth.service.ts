@@ -1,8 +1,10 @@
+import { JwtService } from '@nestjs/jwt';
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Auth, google } from 'googleapis';
 import { EnvironmentVariables } from '../config/environment-variables.interface';
 import { CreateGoogleUserDto } from '../user/dtos/create-google-user.dto';
+import { UserDocument } from '../user/entities/user.entity';
 import { GoogleUserService } from '../user/google-user.service';
 import { UserService } from '../user/user.service';
 import { CodeDto } from './dtos/code.dto';
@@ -16,7 +18,8 @@ export class AuthService {
   constructor(
     private readonly configService: ConfigService<EnvironmentVariables>,
     private readonly googleUserService: GoogleUserService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
+    private readonly jwtService: JwtService
   ) {
     const clientId = this.configService.get('NX_GOOGLE_CLIENT_ID');
     const clientSecret = this.configService.get('NX_GOOGLE_CLIENT_SECRET');
@@ -55,5 +58,13 @@ export class AuthService {
     } catch (error) {
       this.logger.log(error);
     }
+  }
+
+  getCookieWithAccessToken({ id, name, email }: UserDocument) {
+    const payload = { id, name, email };
+    const token = this.jwtService.sign(payload);
+    return `access_token=${token}; HttpOnly; Path=/; Secure; Max-Age=${this.configService.get(
+      'NX_JWT_EXPIRATION_TIME'
+    )}`;
   }
 }

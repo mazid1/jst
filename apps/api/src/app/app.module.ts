@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+
 import { MongooseModule } from '@nestjs/mongoose';
 import * as Joi from 'joi';
 import { ApplicationsModule } from '../applications/applications.module';
@@ -15,6 +16,8 @@ import { AppService } from './app.service';
       validationSchema: Joi.object({
         NX_GOOGLE_CLIENT_ID: Joi.string().required(),
         NX_GOOGLE_CLIENT_SECRET: Joi.string().required(),
+        NX_JWT_SECRET: Joi.string().required(),
+        NX_JWT_EXPIRATION_TIME: Joi.string().required(),
       }),
     }),
     MongooseModule.forRoot(

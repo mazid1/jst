@@ -1,4 +1,5 @@
-import { Body, Controller, Post, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Post, Req, UseInterceptors } from '@nestjs/common';
+import { Request } from 'express';
 import MongooseClassSerializerInterceptor from '../interceptors/mongoose-class-serializer.interceptor';
 import { User } from '../user/entities/user.entity';
 import { AuthService } from './auth.service';
@@ -10,7 +11,10 @@ export class AuthController {
 
   @UseInterceptors(MongooseClassSerializerInterceptor(User))
   @Post('google-login')
-  async googleLogin(@Body() codeDto: CodeDto) {
-    return this.authService.loginWithGoogle(codeDto);
+  async googleLogin(@Body() codeDto: CodeDto, @Req() request: Request) {
+    const user = await this.authService.loginWithGoogle(codeDto);
+    const cookie = this.authService.getCookieWithAccessToken(user);
+    request.res.setHeader('Set-Cookie', cookie);
+    return user;
   }
 }
