@@ -1,18 +1,25 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Exclude, Transform } from 'class-transformer';
 import mongoose, { Document } from 'mongoose';
 import { GoogleUser } from './google-user.entity';
+
+export type UserDocument = User & Document;
 
 @Schema({
   timestamps: true,
 })
-export class User extends Document {
+export class User {
+  @Transform(({ value }) => value.toString())
+  _id: string;
+
   @Prop({ required: true })
   name: string;
 
   @Prop({ required: true })
   email: string;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'GoogleUser' })
+  @Exclude()
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: GoogleUser.name })
   googleUser: GoogleUser;
 }
 

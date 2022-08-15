@@ -1,4 +1,6 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, UseInterceptors } from '@nestjs/common';
+import MongooseClassSerializerInterceptor from '../interceptors/mongoose-class-serializer.interceptor';
+import { User } from '../user/entities/user.entity';
 import { AuthService } from './auth.service';
 import { CodeDto } from './dtos/code.dto';
 
@@ -6,8 +8,9 @@ import { CodeDto } from './dtos/code.dto';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @UseInterceptors(MongooseClassSerializerInterceptor(User))
   @Post('google-login')
-  googleLogin(@Body() codeDto: CodeDto) {
+  async googleLogin(@Body() codeDto: CodeDto) {
     return this.authService.loginWithGoogle(codeDto);
   }
 }
