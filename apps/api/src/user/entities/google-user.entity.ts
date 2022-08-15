@@ -6,10 +6,10 @@ import { Credentials } from 'google-auth-library';
   timestamps: true,
 })
 export class GoogleUser extends Document {
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true })
   externalId: string; // map with "id" field from google
 
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true })
   email: string;
 
   @Prop({ required: true })
