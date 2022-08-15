@@ -13,7 +13,7 @@ export class AuthController {
   @Post('google-login')
   async googleLogin(@Body() codeDto: CodeDto, @Req() request: Request) {
     const user = await this.authService.loginWithGoogle(codeDto);
-    const cookie = this.authService.getCookieWithAccessToken(user);
+    const cookie = this.authService.getCookieWithAccessToken(user.id);
     request.res.setHeader('Set-Cookie', cookie);
     return user;
   }

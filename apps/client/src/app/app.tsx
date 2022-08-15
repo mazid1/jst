@@ -21,10 +21,17 @@ export function App() {
     scope: 'openid email profile https://www.googleapis.com/auth/drive.appdata',
   });
 
+  const getProfile = async () => {
+    const response = await fetch('/api/users/me');
+    const profile = await response.json();
+    console.log('Profile', profile);
+  };
+
   return (
     <>
       <h1>Job Search Tracker (JST)</h1>
       <button onClick={login}>Sign in with Google</button>
+      <button onClick={getProfile}>Who am I</button>
     </>
   );
 }

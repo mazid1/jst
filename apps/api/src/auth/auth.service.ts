@@ -4,10 +4,10 @@ import { ConfigService } from '@nestjs/config';
 import { Auth, google } from 'googleapis';
 import { EnvironmentVariables } from '../config/environment-variables.interface';
 import { CreateGoogleUserDto } from '../user/dtos/create-google-user.dto';
-import { UserDocument } from '../user/entities/user.entity';
 import { GoogleUserService } from '../user/google-user.service';
 import { UserService } from '../user/user.service';
 import { CodeDto } from './dtos/code.dto';
+import { TokenPayloadDto } from './dtos/token-playload.dto';
 
 @Injectable()
 export class AuthService {
@@ -60,10 +60,10 @@ export class AuthService {
     }
   }
 
-  getCookieWithAccessToken({ id, name, email }: UserDocument) {
-    const payload = { id, name, email };
+  getCookieWithAccessToken(id: string) {
+    const payload: TokenPayloadDto = { userId: id };
     const token = this.jwtService.sign(payload);
-    return `access_token=${token}; HttpOnly; Path=/; Secure; Max-Age=${this.configService.get(
+    return `Authentication=${token}; HttpOnly; Path=/; Secure; Max-Age=${this.configService.get(
       'NX_JWT_EXPIRATION_TIME'
     )}`;
   }
