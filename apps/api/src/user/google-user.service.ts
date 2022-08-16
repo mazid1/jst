@@ -13,13 +13,25 @@ export class GoogleUserService {
     private readonly googleUserModel: Model<GoogleUser>
   ) {}
 
-  async findOneOrCreate(createGoogleUserDto: CreateGoogleUserDto) {
+  async findOneAndUpdateOrCreate(createGoogleUserDto: CreateGoogleUserDto) {
+    let googleUser: GoogleUser;
+
     try {
-      return await this.findOneByExternalId(createGoogleUserDto.externalId);
+      googleUser = await this.findOneByExternalId(
+        createGoogleUserDto.externalId
+      );
     } catch (error) {
-      this.logger.log(`${error}, creating new one.`);
+      this.logger.log(`${error}, creating new one`);
       return await this.create(createGoogleUserDto);
     }
+
+    this.logger.log(
+      `Updating Google User externalId #${googleUser.externalId} with latest info`
+    );
+    return await this.googleUserModel.findByIdAndUpdate(
+      googleUser.id,
+      createGoogleUserDto
+    );
   }
 
   async findOneByExternalId(externalId: string) {
@@ -34,8 +46,8 @@ export class GoogleUserService {
     return googleUser;
   }
 
-  create(createGoogleUserDto: CreateGoogleUserDto) {
+  async create(createGoogleUserDto: CreateGoogleUserDto) {
     const googleUser = new this.googleUserModel(createGoogleUserDto);
-    return googleUser.save();
+    return await googleUser.save();
   }
 }

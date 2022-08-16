@@ -42,11 +42,12 @@ export class AuthService {
 
       const googleUserData = userInfoResponse.data;
 
-      const googleUserFromDB = await this.googleUserService.findOneOrCreate({
-        ...(googleUserData as CreateGoogleUserDto),
-        externalId: googleUserData.id,
-        tokens: { ...tokenResponse.tokens },
-      });
+      const googleUserFromDB =
+        await this.googleUserService.findOneAndUpdateOrCreate({
+          ...(googleUserData as CreateGoogleUserDto),
+          externalId: googleUserData.id,
+          tokens: { ...tokenResponse.tokens },
+        });
 
       const userFromDB = await this.userService.findOneOrCreate({
         name: googleUserFromDB.name,
