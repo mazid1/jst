@@ -53,6 +53,14 @@ export class UserService {
       .exec();
   }
 
+  async removeRefreshToken(userId: string) {
+    return this.userModel
+      .findByIdAndUpdate(userId, {
+        refreshTokenHash: null,
+      })
+      .exec();
+  }
+
   async getUserIfRefreshTokenMatches(refreshToken: string, userId: string) {
     const user = await this.findById(userId);
 
@@ -64,5 +72,7 @@ export class UserService {
     if (isRefreshTokenMatching) {
       return user;
     }
+
+    return null;
   }
 }

@@ -21,6 +21,12 @@ export function App() {
     scope: 'openid email profile https://www.googleapis.com/auth/drive.appdata',
   });
 
+  const logout = async () => {
+    await fetch('/api/auth/logout', {
+      method: 'POST',
+    });
+  };
+
   const getProfile = async () => {
     const response = await fetch('/api/users/me');
     const profile = await response.json();
@@ -39,6 +45,7 @@ export function App() {
       <button onClick={login}>Sign in with Google</button>
       <button onClick={getProfile}>Who am I</button>
       <button onClick={refresh}>Refresh Token</button>
+      <button onClick={logout}>Logout</button>
     </>
   );
 }
