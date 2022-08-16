@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { User } from './entities/user.entity';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -41,5 +42,27 @@ export class UserService {
   create(createUserDto: CreateUserDto) {
     const user = new this.userModel(createUserDto);
     return user.save();
+  }
+
+  async setCurrentRefreshToken(refreshToken: string, id: string) {
+    const refreshTokenHash = await bcrypt.hash(refreshToken, 10);
+    await this.userModel
+      .findByIdAndUpdate(id, {
+        refreshTokenHash,
+      })
+      .exec();
+  }
+
+  async getUserIfRefreshTokenMatches(refreshToken: string, userId: string) {
+    const user = await this.findById(userId);
+
+    const isRefreshTokenMatching = await bcrypt.compare(
+      refreshToken,
+      user.refreshTokenHash
+    );
+
+    if (isRefreshTokenMatching) {
+      return user;
+    }
   }
 }

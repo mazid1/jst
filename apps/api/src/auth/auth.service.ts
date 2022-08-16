@@ -60,11 +60,28 @@ export class AuthService {
     }
   }
 
-  getCookieWithAccessToken(id: string) {
-    const payload: TokenPayloadDto = { userId: id };
+  getCookieWithAccessToken(userId: string) {
+    const payload: TokenPayloadDto = { userId };
     const token = this.jwtService.sign(payload);
     return `Authentication=${token}; HttpOnly; Path=/; Secure; Max-Age=${this.configService.get(
       'NX_JWT_ACCESS_TOKEN_EXPIRATION_TIME'
     )}`;
+  }
+
+  getCookieWithRefreshToken(userId: string) {
+    const payload: TokenPayloadDto = { userId };
+    const token = this.jwtService.sign(payload, {
+      secret: this.configService.get('NX_JWT_REFRESH_TOKEN_SECRET'),
+      expiresIn: `${this.configService.get(
+        'NX_JWT_REFRESH_TOKEN_EXPIRATION_TIME'
+      )}s`,
+    });
+    const cookie = `Refresh=${token}; HttpOnly; Path=/api/auth/refresh; Secure; Max-Age=${this.configService.get(
+      'NX_JWT_REFRESH_TOKEN_EXPIRATION_TIME'
+    )}`;
+    return {
+      cookie,
+      token,
+    };
   }
 }

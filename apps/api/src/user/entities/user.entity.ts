@@ -18,6 +18,10 @@ export class User {
   @Prop({ required: true, unique: true })
   email: string;
 
+  @Prop({ nullable: true })
+  @Exclude()
+  public refreshTokenHash?: string;
+
   @Exclude()
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: GoogleUser.name })
   googleUser: GoogleUser;
