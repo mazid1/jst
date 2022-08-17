@@ -8,11 +8,11 @@ import {
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import MongooseClassSerializerInterceptor from '../interceptors/mongoose-class-serializer.interceptor';
 import { User } from './entities/user.entity';
-import { UserService } from './user.service';
+import { UsersService } from './users.service';
 
 @Controller('users')
-export class UserController {
-  constructor(private readonly userService: UserService) {}
+export class UsersController {
+  constructor(private readonly usersService: UsersService) {}
 
   @UseInterceptors(MongooseClassSerializerInterceptor(User))
   @UseGuards(JwtAuthGuard)

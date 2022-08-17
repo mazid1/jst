@@ -3,9 +3,9 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Auth, google } from 'googleapis';
 import { EnvironmentVariables } from '../config/environment-variables.interface';
-import { CreateGoogleUserDto } from '../user/dtos/create-google-user.dto';
-import { GoogleUserService } from '../user/google-user.service';
-import { UserService } from '../user/user.service';
+import { CreateGoogleUserDto } from '../users/dtos/create-google-user.dto';
+import { GoogleUsersService } from '../users/google-users.service';
+import { UsersService } from '../users/users.service';
 import { CodeDto } from './dtos/code.dto';
 import { TokenPayloadDto } from './dtos/token-playload.dto';
 
@@ -17,8 +17,8 @@ export class AuthService {
 
   constructor(
     private readonly configService: ConfigService<EnvironmentVariables>,
-    private readonly googleUserService: GoogleUserService,
-    private readonly userService: UserService,
+    private readonly googleUsersService: GoogleUsersService,
+    private readonly usersService: UsersService,
     private readonly jwtService: JwtService
   ) {
     const clientId = this.configService.get('NX_GOOGLE_CLIENT_ID');
@@ -43,13 +43,13 @@ export class AuthService {
       const googleUserData = userInfoResponse.data;
 
       const googleUserFromDB =
-        await this.googleUserService.findOneAndUpdateOrCreate({
+        await this.googleUsersService.findOneAndUpdateOrCreate({
           ...(googleUserData as CreateGoogleUserDto),
           externalId: googleUserData.id,
           tokens: { ...tokenResponse.tokens },
         });
 
-      const userFromDB = await this.userService.findOneOrCreate({
+      const userFromDB = await this.usersService.findOneOrCreate({
         name: googleUserFromDB.name,
         email: googleUserFromDB.email,
         googleUser: googleUserFromDB.id,

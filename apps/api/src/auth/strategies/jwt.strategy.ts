@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, ExtractJwt } from 'passport-jwt';
 import { EnvironmentVariables } from '../../config/environment-variables.interface';
-import { UserService } from '../../user/user.service';
+import { UsersService } from '../../users/users.service';
 import { TokenPayloadDto } from '../dtos/token-playload.dto';
 import { Request } from 'express';
 
@@ -13,7 +13,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   constructor(
     private readonly configService: ConfigService<EnvironmentVariables>,
-    private readonly userService: UserService
+    private readonly userService: UsersService
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([

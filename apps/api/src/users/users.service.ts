@@ -6,8 +6,8 @@ import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
-export class UserService {
-  private readonly logger = new Logger(UserService.name);
+export class UsersService {
+  private readonly logger = new Logger(UsersService.name);
 
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<User>

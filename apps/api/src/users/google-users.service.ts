@@ -5,8 +5,8 @@ import { CreateGoogleUserDto } from './dtos/create-google-user.dto';
 import { GoogleUser } from './entities/google-user.entity';
 
 @Injectable()
-export class GoogleUserService {
-  private readonly logger = new Logger(GoogleUserService.name);
+export class GoogleUsersService {
+  private readonly logger = new Logger(GoogleUsersService.name);
 
   constructor(
     @InjectModel(GoogleUser.name)

@@ -3,7 +3,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Request } from 'express';
-import { UserService } from '../../user/user.service';
+import { UsersService } from '../../users/users.service';
 import { EnvironmentVariables } from '../../config/environment-variables.interface';
 import { TokenPayloadDto } from '../dtos/token-playload.dto';
 
@@ -14,7 +14,7 @@ export class JwtRefreshTokenStrategy extends PassportStrategy(
 ) {
   constructor(
     private readonly configService: ConfigService<EnvironmentVariables>,
-    private readonly userService: UserService
+    private readonly userService: UsersService
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([

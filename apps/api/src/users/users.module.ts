@@ -2,9 +2,9 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { GoogleUser, GoogleUserSchema } from './entities/google-user.entity';
 import { User, UserSchema } from './entities/user.entity';
-import { GoogleUserService } from './google-user.service';
-import { UserService } from './user.service';
-import { UserController } from './user.controller';
+import { GoogleUsersService } from './google-users.service';
+import { UsersService } from './users.service';
+import { UsersController } from './users.controller';
 
 @Module({
   imports: [
@@ -13,8 +13,8 @@ import { UserController } from './user.controller';
       { name: User.name, schema: UserSchema },
     ]),
   ],
-  providers: [GoogleUserService, UserService],
-  exports: [GoogleUserService, UserService],
-  controllers: [UserController],
+  providers: [GoogleUsersService, UsersService],
+  exports: [GoogleUsersService, UsersService],
+  controllers: [UsersController],
 })
-export class UserModule {}
+export class UsersModule {}

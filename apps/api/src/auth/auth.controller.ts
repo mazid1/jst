@@ -10,8 +10,8 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import MongooseClassSerializerInterceptor from '../interceptors/mongoose-class-serializer.interceptor';
-import { User } from '../user/entities/user.entity';
-import { UserService } from '../user/user.service';
+import { User } from '../users/entities/user.entity';
+import { UsersService } from '../users/users.service';
 import { AuthService } from './auth.service';
 import { CodeDto } from './dtos/code.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
@@ -22,7 +22,7 @@ import RequestWithUser from './interfaces/request-with-user.interface';
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
-    private readonly userService: UserService
+    private readonly usersService: UsersService
   ) {}
 
   @UseInterceptors(MongooseClassSerializerInterceptor(User))
@@ -37,7 +37,7 @@ export class AuthController {
     const { cookie: refreshTokenCookie, token: refreshToken } =
       this.authService.getCookieWithRefreshToken(user.id);
 
-    await this.userService.setCurrentRefreshToken(refreshToken, user.id);
+    await this.usersService.setCurrentRefreshToken(refreshToken, user.id);
 
     request.res.setHeader('Set-Cookie', [
       accessTokenCookie,
@@ -50,7 +50,7 @@ export class AuthController {
   @Post('logout')
   @HttpCode(200)
   async logOut(@Req() request: RequestWithUser) {
-    await this.userService.removeRefreshToken(request.user.id);
+    await this.usersService.removeRefreshToken(request.user.id);
     request.res.setHeader('Set-Cookie', this.authService.getCookiesForLogOut());
   }
 
