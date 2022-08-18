@@ -47,17 +47,25 @@ export class UsersService {
   async setCurrentRefreshToken(refreshToken: string, id: string) {
     const refreshTokenHash = await bcrypt.hash(refreshToken, 10);
     await this.userModel
-      .findByIdAndUpdate(id, {
-        refreshTokenHash,
-      })
+      .findByIdAndUpdate(
+        id,
+        {
+          refreshTokenHash,
+        },
+        { new: true }
+      )
       .exec();
   }
 
   async removeRefreshToken(userId: string) {
     return this.userModel
-      .findByIdAndUpdate(userId, {
-        refreshTokenHash: null,
-      })
+      .findByIdAndUpdate(
+        userId,
+        {
+          refreshTokenHash: null,
+        },
+        { new: true }
+      )
       .exec();
   }
 
