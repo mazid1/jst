@@ -13,21 +13,21 @@ import { UpdateApplicationDto } from './dtos/update-application.dto';
 
 @Controller('applications')
 export class ApplicationsController {
-  constructor(private readonly applicationService: ApplicationsService) {}
+  constructor(private readonly applicationsService: ApplicationsService) {}
 
   @Get()
   findAll() {
-    return this.applicationService.findAll();
+    return this.applicationsService.findAll();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.applicationService.findOne(id);
+    return this.applicationsService.findOne(id);
   }
 
   @Post()
   create(@Body() createApplicationDto: CreateApplicationDto) {
-    return this.applicationService.create(createApplicationDto);
+    return this.applicationsService.create(createApplicationDto);
   }
 
   @Patch(':id')
@@ -35,11 +35,11 @@ export class ApplicationsController {
     @Param('id') id: string,
     @Body() updateApplicationDto: UpdateApplicationDto
   ) {
-    return this.applicationService.update(id, updateApplicationDto);
+    return this.applicationsService.update(id, updateApplicationDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.applicationService.remove(id);
+    return this.applicationsService.remove(id);
   }
 }
