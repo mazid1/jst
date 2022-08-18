@@ -31,6 +31,9 @@ export class Organization {
 
   @Prop()
   linkedinPage: string; // linkedin page url
+
+  @Prop({ default: false })
+  isDeleted: boolean;
 }
 
 export const OrganizationSchema = SchemaFactory.createForClass(Organization);
