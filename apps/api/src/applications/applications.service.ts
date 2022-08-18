@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateApplicationDto } from './dtos/create-application.dto';
+import { UpdateApplicationDto } from './dtos/update-application.dto';
 import { Application } from './entities/application.entity';
 
 @Injectable()
@@ -28,7 +29,7 @@ export class ApplicationsService {
     return application.save();
   }
 
-  async update(id: string, updateApplicationDto) {
+  async update(id: string, updateApplicationDto: UpdateApplicationDto) {
     const existingApplication = await this.applicationModel
       .findOneAndUpdate(
         { _id: id },

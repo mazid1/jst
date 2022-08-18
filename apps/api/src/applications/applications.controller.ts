@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { ApplicationsService } from './applications.service';
 import { CreateApplicationDto } from './dtos/create-application.dto';
+import { UpdateApplicationDto } from './dtos/update-application.dto';
 
 @Controller('applications')
 export class ApplicationsController {
@@ -30,7 +31,10 @@ export class ApplicationsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateApplicationDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateApplicationDto: UpdateApplicationDto
+  ) {
     return this.applicationService.update(id, updateApplicationDto);
   }
 
