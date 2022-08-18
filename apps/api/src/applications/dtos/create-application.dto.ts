@@ -53,7 +53,7 @@ export class CreateApplicationDto {
 
   @IsOptional()
   @IsObject()
-  company: Record<string, any>;
+  organization: Record<string, any>;
 
   @IsOptional()
   @IsArray()
