@@ -5,6 +5,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import * as Joi from 'joi';
 import { ApplicationsModule } from '../applications/applications.module';
 import { AuthModule } from '../auth/auth.module';
+import { InterviewsModule } from '../interviews/interviews.module';
+import { OrganizationsModule } from '../organizations/organizations.module';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -27,6 +29,8 @@ import { AppService } from './app.service';
     ),
     ApplicationsModule,
     AuthModule,
+    OrganizationsModule,
+    InterviewsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

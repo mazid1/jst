@@ -3,6 +3,7 @@ import {
   IsArray,
   IsDate,
   IsEnum,
+  IsMongoId,
   IsNotEmpty,
   IsObject,
   IsOptional,
@@ -52,8 +53,8 @@ export class CreateApplicationDto {
   notes: string;
 
   @IsOptional()
-  @IsObject()
-  organization: Record<string, any>;
+  @IsMongoId()
+  organization: string;
 
   @IsOptional()
   @IsArray()
