@@ -1,6 +1,7 @@
 import { Prop, raw, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Transform, Type } from 'class-transformer';
 import mongoose, { Document } from 'mongoose';
+import { Interview } from '../../interviews/entities/interview.entity';
 import { Organization } from '../../organizations/entities/organization.entity';
 import { ApplicationStatus } from '../enums/application-status.enum';
 import { Link } from '../interfaces/link.interface';
@@ -56,8 +57,11 @@ export class Application {
   @Type(() => Organization)
   organization: Organization;
 
-  @Prop({ type: [mongoose.SchemaTypes.Mixed] })
-  interviews: Record<string, any>[];
+  @Prop({
+    type: [{ type: mongoose.SchemaTypes.ObjectId, ref: Interview.name }],
+  })
+  @Type(() => Interview)
+  interviews: Interview[];
 }
 
 export const ApplicationSchema = SchemaFactory.createForClass(Application);
