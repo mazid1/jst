@@ -14,6 +14,9 @@ export class Interview {
   @Prop({ required: true })
   title: string; // title of the interview. i.e. Phone Interview, 1st Engineer Interview, System Design Interview
 
+  @Prop({ required: true })
+  applicationId: string;
+
   @Prop()
   dateTime: Date; // date time when the interview will take place
 

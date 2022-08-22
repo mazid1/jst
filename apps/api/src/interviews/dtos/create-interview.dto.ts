@@ -1,5 +1,6 @@
 import {
   IsDate,
+  IsMongoId,
   IsNotEmpty,
   IsOptional,
   IsString,
@@ -10,6 +11,9 @@ export class CreateInterviewDto {
   @IsString()
   @IsNotEmpty()
   title: string;
+
+  @IsMongoId()
+  applicationId: string;
 
   @IsOptional()
   @IsDate()

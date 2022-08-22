@@ -1,6 +1,5 @@
 import { Type } from 'class-transformer';
 import {
-  IsArray,
   IsDate,
   IsEnum,
   IsMongoId,
@@ -55,8 +54,4 @@ export class CreateApplicationDto {
   @IsOptional()
   @IsMongoId()
   organization: string;
-
-  @IsOptional()
-  @IsArray()
-  interviews: Record<string, any>[];
 }

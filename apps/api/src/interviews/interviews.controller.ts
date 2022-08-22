@@ -1,4 +1,13 @@
-import { Controller, Delete, Get, Param, Patch } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
+import { CreateInterviewDto } from './dtos/create-interview.dto';
 import { UpdateInterviewDto } from './dtos/update-interview.dto';
 import { InterviewsService } from './interviews.service';
 
@@ -11,10 +20,10 @@ export class InterviewsController {
     return this.interviewsService.findById(id);
   }
 
-  // @Post()
-  // create(@Body() interviewDto: CreateInterviewDto) {
-  //   return this.interviewsService.create(interviewDto);
-  // }
+  @Post()
+  create(@Body() interviewDto: CreateInterviewDto) {
+    return this.interviewsService.create(interviewDto);
+  }
 
   @Patch(':id')
   update(@Param('id') id: string, interviewDto: UpdateInterviewDto) {

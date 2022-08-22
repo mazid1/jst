@@ -10,6 +10,9 @@ export type ApplicationDocument = Application & Document;
 
 @Schema({
   timestamps: true,
+  toJSON: {
+    virtuals: true,
+  },
 })
 export class Application {
   @Transform(({ value }) => value.toString())
@@ -57,11 +60,16 @@ export class Application {
   @Type(() => Organization)
   organization: Organization;
 
-  @Prop({
-    type: [{ type: mongoose.SchemaTypes.ObjectId, ref: Interview.name }],
-  })
   @Type(() => Interview)
   interviews: Interview[];
 }
 
-export const ApplicationSchema = SchemaFactory.createForClass(Application);
+const ApplicationSchema = SchemaFactory.createForClass(Application);
+
+ApplicationSchema.virtual('interviews', {
+  ref: Interview.name,
+  localField: '_id',
+  foreignField: 'applicationId',
+});
+
+export { ApplicationSchema };

@@ -13,7 +13,10 @@ export class ApplicationsService {
   ) {}
 
   findAll() {
-    return this.applicationModel.find().populate('organization').exec();
+    return this.applicationModel
+      .find()
+      .populate(['organization', 'interviews'])
+      .exec();
   }
 
   async findOne(id: string) {
