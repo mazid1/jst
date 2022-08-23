@@ -19,8 +19,11 @@ export class ApplicationsService {
       .exec();
   }
 
-  async findOne(id: string) {
-    const application = await this.applicationModel.findOne({ _id: id }).exec();
+  async findById(id: string) {
+    const application = await this.applicationModel
+      .findById(id)
+      .populate(['organization', 'interviews'])
+      .exec();
     if (!application) {
       throw new NotFoundException(`Application #${id} not found`);
     }
@@ -29,16 +32,14 @@ export class ApplicationsService {
 
   create(createApplicationDto: CreateApplicationDto) {
     const application = new this.applicationModel(createApplicationDto);
+    application.populate(['organization', 'interviews']);
     return application.save();
   }
 
   async update(id: string, updateApplicationDto: UpdateApplicationDto) {
     const existingApplication = await this.applicationModel
-      .findOneAndUpdate(
-        { _id: id },
-        { $set: updateApplicationDto },
-        { new: true }
-      )
+      .findByIdAndUpdate(id, updateApplicationDto, { new: true })
+      .populate(['organization', 'interviews'])
       .exec();
 
     if (!existingApplication) {
@@ -49,7 +50,7 @@ export class ApplicationsService {
   }
 
   async remove(id: string) {
-    const application = await this.findOne(id);
+    const application = await this.findById(id);
     return application.remove();
   }
 }

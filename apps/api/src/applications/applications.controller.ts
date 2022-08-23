@@ -24,7 +24,7 @@ export class ApplicationsController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.applicationsService.findOne(id);
+    return this.applicationsService.findById(id);
   }
 
   @Post()
