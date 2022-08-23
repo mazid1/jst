@@ -3,6 +3,8 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   Patch,
   Post,
@@ -38,8 +40,9 @@ export class OrganizationsController {
     return this.organizationsService.update(id, updateOrganizationDto);
   }
 
+  @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
   softDelete(@Param('id') id: string) {
-    return this.organizationsService.deleteSoftly(id);
+    this.organizationsService.deleteSoftly(id);
   }
 }

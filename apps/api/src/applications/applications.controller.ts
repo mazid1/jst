@@ -3,6 +3,8 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   Patch,
   Post,
@@ -38,8 +40,9 @@ export class ApplicationsController {
     return this.applicationsService.update(id, updateApplicationDto);
   }
 
+  @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.applicationsService.remove(id);
+    this.applicationsService.remove(id);
   }
 }
