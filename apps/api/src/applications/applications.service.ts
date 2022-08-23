@@ -13,17 +13,11 @@ export class ApplicationsService {
   ) {}
 
   findAll() {
-    return this.applicationModel
-      .find()
-      .populate(['organization', 'interviews'])
-      .exec();
+    return this.applicationModel.find().exec();
   }
 
   async findById(id: string) {
-    const application = await this.applicationModel
-      .findById(id)
-      .populate(['organization', 'interviews'])
-      .exec();
+    const application = await this.applicationModel.findById(id).exec();
     if (!application) {
       throw new NotFoundException(`Application #${id} not found`);
     }
@@ -32,14 +26,12 @@ export class ApplicationsService {
 
   create(createApplicationDto: CreateApplicationDto) {
     const application = new this.applicationModel(createApplicationDto);
-    application.populate(['organization', 'interviews']);
     return application.save();
   }
 
   async update(id: string, updateApplicationDto: UpdateApplicationDto) {
     const existingApplication = await this.applicationModel
       .findByIdAndUpdate(id, updateApplicationDto, { new: true })
-      .populate(['organization', 'interviews'])
       .exec();
 
     if (!existingApplication) {

@@ -56,7 +56,11 @@ export class Application {
   @Prop()
   notes: string;
 
-  @Prop({ type: mongoose.SchemaTypes.ObjectId, ref: Organization.name })
+  @Prop({
+    type: mongoose.SchemaTypes.ObjectId,
+    ref: Organization.name,
+    autopopulate: true,
+  })
   @Type(() => Organization)
   organization: Organization;
 
@@ -70,6 +74,7 @@ ApplicationSchema.virtual('interviews', {
   ref: Interview.name,
   localField: '_id',
   foreignField: 'applicationId',
+  autopopulate: true,
 });
 
 export { ApplicationSchema };

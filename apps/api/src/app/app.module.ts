@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 
 import { MongooseModule } from '@nestjs/mongoose';
 import * as Joi from 'joi';
+import { Connection } from 'mongoose';
 import { ApplicationsModule } from '../applications/applications.module';
 import { AuthModule } from '../auth/auth.module';
 import { InterviewsModule } from '../interviews/interviews.module';
@@ -25,7 +26,14 @@ import { AppService } from './app.service';
       }),
     }),
     MongooseModule.forRoot(
-      'mongodb://admin:pass1234@localhost:27017/jst?authMechanism=DEFAULT&authSource=admin'
+      'mongodb://admin:pass1234@localhost:27017/jst?authMechanism=DEFAULT&authSource=admin',
+      {
+        connectionFactory: (connection: Connection) => {
+          // eslint-disable-next-line @typescript-eslint/no-var-requires
+          connection.plugin(require('mongoose-autopopulate'));
+          return connection;
+        },
+      }
     ),
     ApplicationsModule,
     AuthModule,
