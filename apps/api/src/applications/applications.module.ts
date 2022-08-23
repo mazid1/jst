@@ -12,5 +12,6 @@ import { Application, ApplicationSchema } from './entities/application.entity';
   ],
   controllers: [ApplicationsController],
   providers: [ApplicationsService],
+  exports: [ApplicationsService],
 })
 export class ApplicationsModule {}

@@ -28,7 +28,7 @@ export class InterviewsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, interviewDto: UpdateInterviewDto) {
+  update(@Param('id') id: string, @Body() interviewDto: UpdateInterviewDto) {
     return this.interviewsService.update(id, interviewDto);
   }
 

@@ -13,29 +13,30 @@ export class CreateInterviewDto {
   title: string;
 
   @IsMongoId()
+  @IsNotEmpty()
   applicationId: string;
 
-  @IsOptional()
   @IsDate()
+  @IsOptional()
   dateTime: Date;
 
-  @IsOptional()
   @IsString()
+  @IsOptional()
   venue: string;
 
-  @IsOptional()
   @IsUrl()
+  @IsOptional()
   joinLink: string;
 
-  @IsOptional()
   @IsString()
+  @IsOptional()
   duration: string;
 
-  @IsOptional()
   @IsString()
+  @IsOptional()
   description: string;
 
-  @IsOptional()
   @IsString()
+  @IsOptional()
   notes: string;
 }

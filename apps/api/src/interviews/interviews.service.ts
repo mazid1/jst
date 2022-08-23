@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { ApplicationsService } from '../applications/applications.service';
 import { CreateInterviewDto } from './dtos/create-interview.dto';
 import { UpdateInterviewDto } from './dtos/update-interview.dto';
 import { Interview } from './entities/interview.entity';
@@ -9,7 +10,8 @@ import { Interview } from './entities/interview.entity';
 export class InterviewsService {
   constructor(
     @InjectModel(Interview.name)
-    private readonly interviewModel: Model<Interview>
+    private readonly interviewModel: Model<Interview>,
+    private readonly applicationsService: ApplicationsService
   ) {}
 
   async findById(id: string) {
@@ -20,12 +22,16 @@ export class InterviewsService {
     return interview;
   }
 
-  create(interviewDto: CreateInterviewDto) {
+  async create(interviewDto: CreateInterviewDto) {
+    await this.applicationsService.findById(interviewDto.applicationId);
     const interview = new this.interviewModel(interviewDto);
     return interview.save();
   }
 
   async update(id: string, interviewDto: UpdateInterviewDto) {
+    if (interviewDto.applicationId) {
+      await this.applicationsService.findById(interviewDto.applicationId);
+    }
     const updatedInterview = await this.interviewModel
       .findByIdAndUpdate(id, interviewDto, { new: true })
       .exec();
