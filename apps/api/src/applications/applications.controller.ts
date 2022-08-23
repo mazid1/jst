@@ -22,6 +22,12 @@ export class ApplicationsController {
     return this.applicationsService.findAll();
   }
 
+  @Get(':id/interviews')
+  async findAllInterviews(@Param('id') id: string) {
+    const application = await this.applicationsService.findById(id);
+    return application.interviews;
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.applicationsService.findById(id);
