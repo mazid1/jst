@@ -40,3 +40,6 @@ Thumbs.db
 
 # Env
 *.env
+.env*
+!.env.project
+!.env.vault
