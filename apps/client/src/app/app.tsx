@@ -1,4 +1,5 @@
 import { CodeResponse, useGoogleLogin } from '@react-oauth/google';
+import Layout from '../layout/Layout';
 
 export function App() {
   const onLoginSuccess = async (codeResponse: CodeResponse) => {
@@ -40,13 +41,13 @@ export function App() {
   };
 
   return (
-    <>
+    <Layout>
       <h1>Job Search Tracker (JST)</h1>
       <button onClick={login}>Sign in with Google</button>
       <button onClick={getProfile}>Who am I</button>
       <button onClick={refresh}>Refresh Token</button>
       <button onClick={logout}>Logout</button>
-    </>
+    </Layout>
   );
 }
 
