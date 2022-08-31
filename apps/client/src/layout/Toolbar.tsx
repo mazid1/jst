@@ -15,8 +15,9 @@ import {
   MenuDivider,
   Stack,
   Container,
+  useColorMode,
 } from '@chakra-ui/react';
-import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
+import { HamburgerIcon, CloseIcon, MoonIcon, SunIcon } from '@chakra-ui/icons';
 import { ReactNode } from 'react';
 
 const links = ['Applications', 'Organizations'];
@@ -38,6 +39,7 @@ const NavLink = ({ children }: { children: ReactNode }) => (
 
 const Toolbar = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { colorMode, toggleColorMode } = useColorMode();
 
   return (
     <Box
@@ -74,7 +76,12 @@ const Toolbar = () => {
               ))}
             </HStack>
           </HStack>
-          <Flex alignItems={'center'}>
+          <HStack alignItems={'center'}>
+            <IconButton
+              icon={colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
+              onClick={() => toggleColorMode()}
+              aria-label={'Toggle Dark Mode'}
+            />
             <Menu>
               <MenuButton
                 as={Button}
@@ -96,7 +103,7 @@ const Toolbar = () => {
                 <MenuItem>Logout</MenuItem>
               </MenuList>
             </Menu>
-          </Flex>
+          </HStack>
         </Flex>
 
         {isOpen ? (
