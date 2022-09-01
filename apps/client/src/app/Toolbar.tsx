@@ -18,26 +18,10 @@ import {
   useColorMode,
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon, MoonIcon, SunIcon } from '@chakra-ui/icons';
-import { ReactNode } from 'react';
 import { Link as ReactRouterLink } from 'react-router-dom';
+import NavLink from '../components/NavLink';
 
 const links = ['Applications', 'Organizations'];
-
-const NavLink = ({ children, to }: { children: ReactNode; to: string }) => (
-  <Link
-    px={2}
-    py={1}
-    rounded={'md'}
-    _hover={{
-      textDecoration: 'none',
-      bg: useColorModeValue('gray.200', 'gray.700'),
-    }}
-    as={ReactRouterLink}
-    to={to}
-  >
-    {children}
-  </Link>
-);
 
 const Toolbar = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
