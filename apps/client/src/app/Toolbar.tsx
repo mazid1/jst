@@ -19,10 +19,11 @@ import {
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon, MoonIcon, SunIcon } from '@chakra-ui/icons';
 import { ReactNode } from 'react';
+import { Link as ReactRouterLink } from 'react-router-dom';
 
 const links = ['Applications', 'Organizations'];
 
-const NavLink = ({ children }: { children: ReactNode }) => (
+const NavLink = ({ children, to }: { children: ReactNode; to: string }) => (
   <Link
     px={2}
     py={1}
@@ -31,7 +32,8 @@ const NavLink = ({ children }: { children: ReactNode }) => (
       textDecoration: 'none',
       bg: useColorModeValue('gray.200', 'gray.700'),
     }}
-    href={'#'}
+    as={ReactRouterLink}
+    to={to}
   >
     {children}
   </Link>
@@ -59,20 +61,25 @@ const Toolbar = () => {
             onClick={isOpen ? onClose : onOpen}
           />
           <HStack spacing={8} alignItems={'center'}>
-            <Box
+            <Link
               color={useColorModeValue('teal.700', 'teal.200')}
               fontWeight={'extrabold'}
               fontSize={'xl'}
+              as={ReactRouterLink}
+              to={'/'}
+              _hover={{ textDecoration: 'none' }}
             >
               JST
-            </Box>
+            </Link>
             <HStack
               as={'nav'}
               spacing={4}
               display={{ base: 'none', md: 'flex' }}
             >
               {links.map((link) => (
-                <NavLink key={link}>{link}</NavLink>
+                <NavLink key={link} to={link.toLowerCase()}>
+                  {link}
+                </NavLink>
               ))}
             </HStack>
           </HStack>
@@ -110,7 +117,9 @@ const Toolbar = () => {
           <Box pb={4} display={{ md: 'none' }}>
             <Stack as={'nav'} spacing={4}>
               {links.map((link) => (
-                <NavLink key={link}>{link}</NavLink>
+                <NavLink key={link} to={link.toLowerCase()}>
+                  {link}
+                </NavLink>
               ))}
             </Stack>
           </Box>
