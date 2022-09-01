@@ -15,7 +15,8 @@ const OrganizationsList = () => {
   if (isLoading) {
     content = <Spinner />;
   } else if (isSuccess) {
-    content = organizations.toString();
+    console.log(organizations);
+    content = JSON.stringify(organizations);
   } else if (isError) {
     content = <div>{error.toString()}</div>;
   }
