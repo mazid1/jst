@@ -52,6 +52,7 @@ export class AuthService {
       const userFromDB = await this.usersService.findOneOrCreate({
         name: googleUserFromDB.name,
         email: googleUserFromDB.email,
+        picture: googleUserFromDB.picture,
         googleUser: googleUserFromDB.id,
       });
 

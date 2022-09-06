@@ -18,6 +18,9 @@ export class User {
   @Prop({ required: true, unique: true })
   email: string;
 
+  @Prop()
+  picture: string;
+
   @Prop({ nullable: true })
   @Exclude()
   public refreshTokenHash?: string;
