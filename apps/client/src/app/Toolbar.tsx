@@ -20,12 +20,79 @@ import {
 import { HamburgerIcon, CloseIcon, MoonIcon, SunIcon } from '@chakra-ui/icons';
 import { Link as ReactRouterLink } from 'react-router-dom';
 import NavLink from '../components/NavLink';
+import { useSelector } from 'react-redux';
+import { RootState } from './store';
+import { CodeResponse, useGoogleLogin } from '@react-oauth/google';
+import {
+  useLoginMutation,
+  useLogoutMutation,
+} from '../features/auth/authApiSlice';
+import { useAppDispatch } from './hooks';
+import { resetUser, setUser } from '../features/auth/authSlice';
+import GoogleSignInButton from '../components/GoogleSignInButton';
 
 const links = ['Applications', 'Organizations'];
 
 const Toolbar = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { colorMode, toggleColorMode } = useColorMode();
+
+  const [login] = useLoginMutation();
+  const [logout] = useLogoutMutation();
+  const dispatch = useAppDispatch();
+
+  const currentUser = useSelector((state: RootState) => state.auth);
+
+  const startLogin = async (codeResponse: CodeResponse) => {
+    const { code } = codeResponse;
+    try {
+      const { name, email, picture } = await login({ code }).unwrap();
+      dispatch(setUser({ name, email, picture }));
+      console.log(name, email, picture);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const requestUserConsent = useGoogleLogin({
+    onSuccess: startLogin,
+    onError: (err) => console.log(err),
+    flow: 'auth-code',
+    scope: 'openid email profile https://www.googleapis.com/auth/drive.appdata',
+  });
+
+  const startLogout = async () => {
+    try {
+      await logout(null).unwrap();
+    } catch (err) {
+      console.log(err);
+    } finally {
+      dispatch(resetUser());
+    }
+  };
+
+  const loginButton = <GoogleSignInButton onClick={requestUserConsent} />;
+
+  const userMenu = (
+    <Menu>
+      <MenuButton
+        as={Button}
+        rounded={'full'}
+        variant={'link'}
+        cursor={'pointer'}
+        minW={0}
+      >
+        <Avatar size={'sm'} src={currentUser.picture || undefined} />
+      </MenuButton>
+      <MenuList>
+        <MenuItem>Account</MenuItem>
+        <MenuDivider />
+        <MenuItem onClick={startLogout}>Logout</MenuItem>
+      </MenuList>
+    </Menu>
+  );
+
+  const userButton = currentUser.email ? userMenu : loginButton;
 
   return (
     <Box
@@ -37,14 +104,14 @@ const Toolbar = () => {
     >
       <Container maxW={'6xl'}>
         <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
-          <IconButton
-            size={'md'}
-            icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
-            aria-label={'Open Menu'}
-            display={{ md: 'none' }}
-            onClick={isOpen ? onClose : onOpen}
-          />
-          <HStack spacing={8} alignItems={'center'}>
+          <HStack spacing={2} alignItems={'center'}>
+            <IconButton
+              size={'md'}
+              icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
+              aria-label={'Open Menu'}
+              display={{ md: 'none' }}
+              onClick={isOpen ? onClose : onOpen}
+            />
             <Link
               color={useColorModeValue('teal.700', 'teal.200')}
               fontWeight={'extrabold'}
@@ -73,27 +140,7 @@ const Toolbar = () => {
               onClick={() => toggleColorMode()}
               aria-label={'Toggle Dark Mode'}
             />
-            <Menu>
-              <MenuButton
-                as={Button}
-                rounded={'full'}
-                variant={'link'}
-                cursor={'pointer'}
-                minW={0}
-              >
-                <Avatar
-                  size={'sm'}
-                  src={
-                    'https://images.unsplash.com/photo-1493666438817-866a91353ca9?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9'
-                  }
-                />
-              </MenuButton>
-              <MenuList>
-                <MenuItem>Account</MenuItem>
-                <MenuDivider />
-                <MenuItem>Logout</MenuItem>
-              </MenuList>
-            </Menu>
+            {userButton}
           </HStack>
         </Flex>
 
