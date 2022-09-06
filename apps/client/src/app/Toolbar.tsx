@@ -20,15 +20,12 @@ import {
 import { HamburgerIcon, CloseIcon, MoonIcon, SunIcon } from '@chakra-ui/icons';
 import { Link as ReactRouterLink } from 'react-router-dom';
 import NavLink from '../components/NavLink';
-import { useSelector } from 'react-redux';
-import { RootState } from './store';
 import { CodeResponse, useGoogleLogin } from '@react-oauth/google';
 import {
+  useCurrentUserQuery,
   useLoginMutation,
   useLogoutMutation,
 } from '../features/auth/authApiSlice';
-import { useAppDispatch } from './hooks';
-import { resetUser, setUser } from '../features/auth/authSlice';
 import GoogleSignInButton from '../components/GoogleSignInButton';
 
 const links = ['Applications', 'Organizations'];
@@ -39,15 +36,13 @@ const Toolbar = () => {
 
   const [login] = useLoginMutation();
   const [logout] = useLogoutMutation();
-  const dispatch = useAppDispatch();
 
-  const currentUser = useSelector((state: RootState) => state.auth);
+  const { data: currentUser } = useCurrentUserQuery();
 
   const startLogin = async (codeResponse: CodeResponse) => {
     const { code } = codeResponse;
     try {
       const { name, email, picture } = await login({ code }).unwrap();
-      dispatch(setUser({ name, email, picture }));
       console.log(name, email, picture);
     } catch (err) {
       console.log(err);
@@ -66,8 +61,6 @@ const Toolbar = () => {
       await logout(null).unwrap();
     } catch (err) {
       console.log(err);
-    } finally {
-      dispatch(resetUser());
     }
   };
 
@@ -82,7 +75,7 @@ const Toolbar = () => {
         cursor={'pointer'}
         minW={0}
       >
-        <Avatar size={'sm'} src={currentUser.picture || undefined} />
+        <Avatar size={'sm'} src={currentUser?.picture || undefined} />
       </MenuButton>
       <MenuList>
         <MenuItem>Account</MenuItem>
@@ -92,7 +85,7 @@ const Toolbar = () => {
     </Menu>
   );
 
-  const userButton = currentUser.email ? userMenu : loginButton;
+  const userButton = currentUser?.name ? userMenu : loginButton;
 
   return (
     <Box
