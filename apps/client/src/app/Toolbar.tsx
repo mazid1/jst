@@ -22,11 +22,12 @@ import { Link as ReactRouterLink } from 'react-router-dom';
 import NavLink from '../components/NavLink';
 import { CodeResponse, useGoogleLogin } from '@react-oauth/google';
 import {
-  useCurrentUserQuery,
   useLoginMutation,
   useLogoutMutation,
 } from '../features/auth/authApiSlice';
 import GoogleSignInButton from '../components/GoogleSignInButton';
+import { selectCurrentUser } from '../features/auth/authSlice';
+import { useSelector } from 'react-redux';
 
 const links = ['Applications', 'Organizations'];
 
@@ -37,7 +38,8 @@ const Toolbar = () => {
   const [login] = useLoginMutation();
   const [logout] = useLogoutMutation();
 
-  const { data: currentUser } = useCurrentUserQuery();
+  // const { data: currentUser } = useCurrentUserQuery();
+  const currentUser = useSelector(selectCurrentUser);
 
   const startLogin = async (codeResponse: CodeResponse) => {
     const { code } = codeResponse;
@@ -58,7 +60,7 @@ const Toolbar = () => {
 
   const startLogout = async () => {
     try {
-      await logout(null).unwrap();
+      await logout().unwrap();
     } catch (err) {
       console.log(err);
     }

@@ -1,47 +1,52 @@
-import { FetchBaseQueryError } from '@reduxjs/toolkit/dist/query';
 import { apiSlice } from '../api/apiSlice';
-
-export interface AuthState {
-  name: string | null;
-  email: string | null;
-  picture: string | null;
-}
+import { AuthState, resetUser, setUser } from './authSlice';
 
 export const authApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    login: builder.mutation({
+    login: builder.mutation<AuthState, { code: string }>({
       query: (codeDto: { code: string }) => ({
         url: '/auth/google-login',
         method: 'POST',
         body: codeDto,
       }),
-      invalidatesTags: ['CURRENT_USER'],
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          const { data: user } = await queryFulfilled;
+          dispatch(setUser(user));
+        } catch (e) {
+          console.log('failed to login', e);
+          dispatch(resetUser());
+        }
+      },
     }),
 
-    logout: builder.mutation({
+    logout: builder.mutation<void, void>({
       query: () => ({
         url: '/auth/logout',
         method: 'POST',
       }),
-      invalidatesTags: ['CURRENT_USER'],
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled;
+        } catch (e) {
+          console.log('failed to logout', e);
+        } finally {
+          dispatch(resetUser());
+        }
+      },
     }),
 
     currentUser: builder.query<AuthState, void>({
-      async queryFn(arg, api, extraOptions, baseQuery) {
-        const userResult = await baseQuery('/users/me');
-
-        if (userResult.error?.status === 401)
-          return {
-            data: userResult.data as AuthState,
-          };
-
-        return userResult.data
-          ? {
-              data: userResult.data as AuthState,
-            }
-          : { error: userResult.error as FetchBaseQueryError };
+      query: () => '/users/me',
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          const { data: user } = await queryFulfilled;
+          dispatch(setUser(user));
+        } catch (e) {
+          console.log('failed to get current user', e);
+          dispatch(resetUser());
+        }
       },
-      providesTags: ['CURRENT_USER'],
     }),
   }),
 });
