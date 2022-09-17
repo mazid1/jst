@@ -121,11 +121,12 @@ const Toolbar = () => {
               spacing={4}
               display={{ base: 'none', md: 'flex' }}
             >
-              {links.map((link) => (
-                <NavLink key={link} to={link.toLowerCase()}>
-                  {link}
-                </NavLink>
-              ))}
+              {currentUser?.name &&
+                links.map((link) => (
+                  <NavLink key={link} to={link.toLowerCase()}>
+                    {link}
+                  </NavLink>
+                ))}
             </HStack>
           </HStack>
           <HStack alignItems={'center'}>
@@ -141,11 +142,12 @@ const Toolbar = () => {
         {isOpen ? (
           <Box pb={4} display={{ md: 'none' }}>
             <Stack as={'nav'} spacing={4}>
-              {links.map((link) => (
-                <NavLink key={link} to={link.toLowerCase()}>
-                  {link}
-                </NavLink>
-              ))}
+              {currentUser?.name &&
+                links.map((link) => (
+                  <NavLink key={link} to={link.toLowerCase()}>
+                    {link}
+                  </NavLink>
+                ))}
             </Stack>
           </Box>
         ) : null}

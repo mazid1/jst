@@ -4,6 +4,7 @@ import Footer from './app/Footer';
 import Toolbar from './app/Toolbar';
 import ApplicationsList from './features/application/ApplicationsList';
 import { useCurrentUserQuery } from './features/auth/authApiSlice';
+import RequireAuth from './features/auth/RequireAuth';
 import Home from './features/home/Home';
 import OrganizationsList from './features/organization/OrganizationsList';
 
@@ -19,8 +20,10 @@ export function App() {
         <Container maxW={'8xl'}>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/applications" element={<ApplicationsList />} />
-            <Route path="/organizations" element={<OrganizationsList />} />
+            <Route element={<RequireAuth />}>
+              <Route path="/applications" element={<ApplicationsList />} />
+              <Route path="/organizations" element={<OrganizationsList />} />
+            </Route>
           </Routes>
         </Container>
       </Box>
