@@ -4,7 +4,6 @@ import type {
   FetchArgs,
   FetchBaseQueryError,
 } from '@reduxjs/toolkit/query';
-// import { authApiSlice } from '../auth/authApiSlice';
 import { resetUser } from '../auth/authSlice';
 import { Mutex } from 'async-mutex';
 
@@ -18,24 +17,11 @@ export const baseQueryWithReauth: BaseQueryFn<
   unknown,
   FetchBaseQueryError
 > = async (args, api, extraOptions) => {
-  console.log('args', args);
   // wait until the mutex is available without locking it
   await mutex.waitForUnlock();
   let result = await baseQuery(args, api, extraOptions);
 
-  let url = '';
-  if (typeof args === 'string') {
-    url = args;
-  } else if (typeof args === 'object') {
-    url = args.url;
-  }
-
-  if (
-    result.error &&
-    result.error.status === 401 &&
-    url !== '/auth/logout' &&
-    url !== '/auth/refresh'
-  ) {
+  if (result.error && result.error.status === 401) {
     // checking whether the mutex is locked
     if (!mutex.isLocked()) {
       const release = await mutex.acquire();

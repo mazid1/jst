@@ -38,7 +38,6 @@ const Toolbar = () => {
   const [login] = useLoginMutation();
   const [logout] = useLogoutMutation();
 
-  // const { data: currentUser } = useCurrentUserQuery();
   const currentUser = useSelector(selectCurrentUser);
 
   const startLogin = async (codeResponse: CodeResponse) => {
