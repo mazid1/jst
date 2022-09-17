@@ -1,9 +1,9 @@
 import { apiSlice } from '../api/apiSlice';
-import { AuthState, resetUser, setUser } from './authSlice';
+import { User, resetUser, setUser } from './userSlice';
 
 export const authApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    login: builder.mutation<AuthState, { code: string }>({
+    login: builder.mutation<User, { code: string }>({
       query: (codeDto: { code: string }) => ({
         url: '/auth/google-login',
         method: 'POST',
@@ -36,7 +36,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
       },
     }),
 
-    currentUser: builder.query<AuthState, void>({
+    currentUser: builder.query<User, void>({
       query: () => '/users/me',
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {

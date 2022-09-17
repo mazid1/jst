@@ -26,7 +26,7 @@ import {
   useLogoutMutation,
 } from '../features/auth/authApiSlice';
 import GoogleSignInButton from '../components/GoogleSignInButton';
-import { selectCurrentUser } from '../features/auth/authSlice';
+import { selectCurrentUser } from '../features/auth/userSlice';
 import { useSelector } from 'react-redux';
 
 const links = ['Applications', 'Organizations'];
@@ -76,7 +76,7 @@ const Toolbar = () => {
         cursor={'pointer'}
         minW={0}
       >
-        <Avatar size={'sm'} src={currentUser?.picture || undefined} />
+        <Avatar size={'sm'} src={currentUser?.picture} />
       </MenuButton>
       <MenuList>
         <MenuItem>Account</MenuItem>
@@ -86,7 +86,7 @@ const Toolbar = () => {
     </Menu>
   );
 
-  const userButton = currentUser?.name ? userMenu : loginButton;
+  const userButton = currentUser ? userMenu : loginButton;
 
   return (
     <Box
@@ -121,7 +121,7 @@ const Toolbar = () => {
               spacing={4}
               display={{ base: 'none', md: 'flex' }}
             >
-              {currentUser?.name &&
+              {currentUser &&
                 links.map((link) => (
                   <NavLink key={link} to={link.toLowerCase()}>
                     {link}
@@ -142,7 +142,7 @@ const Toolbar = () => {
         {isOpen ? (
           <Box pb={4} display={{ md: 'none' }}>
             <Stack as={'nav'} spacing={4}>
-              {currentUser?.name &&
+              {currentUser &&
                 links.map((link) => (
                   <NavLink key={link} to={link.toLowerCase()}>
                     {link}

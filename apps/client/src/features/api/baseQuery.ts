@@ -4,7 +4,7 @@ import type {
   FetchArgs,
   FetchBaseQueryError,
 } from '@reduxjs/toolkit/query';
-import { resetUser } from '../auth/authSlice';
+import { resetUser } from '../auth/userSlice';
 import { Mutex } from 'async-mutex';
 
 // create a new mutex
