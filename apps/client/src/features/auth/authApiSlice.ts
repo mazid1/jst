@@ -32,6 +32,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
         } catch (e) {
           console.log('failed to logout', e);
         } finally {
+          dispatch(apiSlice.util.resetApiState());
           dispatch(resetUser());
         }
       },
@@ -40,12 +41,6 @@ export const authApiSlice = apiSlice.injectEndpoints({
     currentUser: builder.query<User, void>({
       async queryFn(arg, api, extraOptions, baseQuery) {
         const userResult = await baseQuery('/users/me');
-
-        if (userResult.data) {
-          api.dispatch(setUser(userResult.data as User));
-        } else {
-          api.dispatch(resetUser());
-        }
 
         return userResult.data
           ? {

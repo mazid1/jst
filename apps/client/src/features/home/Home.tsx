@@ -1,21 +1,25 @@
-const Home = () => {
-  const getProfile = async () => {
-    const response = await fetch('/api/users/me');
-    const profile = await response.json();
-    console.log('Profile', profile);
-  };
+import { Button } from '@chakra-ui/button';
+import { useAppDispatch } from '../../app/hooks';
+import { authApiSlice } from '../auth/authApiSlice';
 
-  const refresh = async () => {
-    const response = await fetch('/api/auth/refresh');
-    const profile = await response.json();
-    console.log('Profile after refresh token', profile);
+const Home = () => {
+  const dispatch = useAppDispatch();
+
+  const getProfile = async () => {
+    const response = await dispatch(
+      authApiSlice.endpoints.currentUser.initiate()
+    );
+    if (response.data) {
+      console.log('Profile', response.data);
+    } else if (response.error) {
+      console.log('Profile error', response.error);
+    }
   };
 
   return (
     <>
       <h1>Job Search Tracker (JST)</h1>
-      <button onClick={getProfile}>Who am I</button>
-      <button onClick={refresh}>Refresh Token</button>
+      <Button onClick={getProfile}>Who am I</Button>
     </>
   );
 };
