@@ -10,12 +10,12 @@ import MongooseClassSerializerInterceptor from '../interceptors/mongoose-class-s
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
 
+@UseGuards(JwtAuthGuard)
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @UseInterceptors(MongooseClassSerializerInterceptor(User))
-  @UseGuards(JwtAuthGuard)
   @Get('/me')
   whoAmI(@Req() request) {
     return request.user;

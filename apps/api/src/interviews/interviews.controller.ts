@@ -8,11 +8,14 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CreateInterviewDto } from './dtos/create-interview.dto';
 import { UpdateInterviewDto } from './dtos/update-interview.dto';
 import { InterviewsService } from './interviews.service';
 
+@UseGuards(JwtAuthGuard)
 @Controller('interviews')
 export class InterviewsController {
   constructor(private readonly interviewsService: InterviewsService) {}
