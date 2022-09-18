@@ -96,7 +96,7 @@ const Toolbar = () => {
       borderColor={useColorModeValue('gray.300', 'gray.600')}
       px={4}
     >
-      <Container maxW={'6xl'}>
+      <Container maxW={'8xl'}>
         <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
           <HStack spacing={2} alignItems={'center'}>
             <IconButton

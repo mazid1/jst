@@ -9,7 +9,6 @@ interface Props {
 
 const RequireAuth = ({ children }: Props) => {
   const user = useSelector(selectCurrentUser);
-  console.log('USER', user);
 
   if (!user) return <Navigate to={'/'} replace />;
 
