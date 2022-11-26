@@ -1,5 +1,5 @@
 import { Spinner } from '@chakra-ui/react';
-import { useGetOrganizationsQuery } from '../api/apiSlice';
+import { useGetOrganizationsQuery } from '../../redux/api/apiSlice';
 
 const OrganizationsList = () => {
   const {

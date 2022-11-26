@@ -1,7 +1,7 @@
 import { ReactJSXElement } from '@emotion/react/types/jsx-namespace';
 import { useSelector } from 'react-redux';
 import { Navigate, Outlet } from 'react-router-dom';
-import { selectCurrentUser } from './userSlice';
+import { selectCurrentUser } from '../../redux/slices/userSlice';
 
 interface Props {
   children?: ReactJSXElement;

@@ -6,7 +6,7 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 import { FaInstagram, FaTwitter, FaYoutube } from 'react-icons/fa';
-import SocialButton from '../components/SocialButton';
+import SocialButton from './common/SocialButton';
 
 const Footer = () => {
   return (

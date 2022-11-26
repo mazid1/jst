@@ -1,12 +1,12 @@
 import { Box, Container, Progress } from '@chakra-ui/react';
 import { Route, Routes } from 'react-router-dom';
-import Footer from './app/Footer';
-import Toolbar from './app/Toolbar';
-import ApplicationsList from './features/application/ApplicationsList';
-import { useCurrentUserQuery } from './features/auth/authApiSlice';
-import RequireAuth from './features/auth/RequireAuth';
-import Home from './features/home/Home';
-import OrganizationsList from './features/organization/OrganizationsList';
+import ApplicationsList from './components/application/ApplicationsList';
+import RequireAuth from './components/auth/RequireAuth';
+import Footer from './components/Footer';
+import Home from './components/home/Home';
+import OrganizationsList from './components/organization/OrganizationsList';
+import Toolbar from './components/Toolbar';
+import { useCurrentUserQuery } from './redux/slices/authApiSlice';
 
 export function App() {
   const { isLoading } = useCurrentUserQuery();

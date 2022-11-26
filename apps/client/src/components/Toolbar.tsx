@@ -1,33 +1,33 @@
+import { CloseIcon, HamburgerIcon, MoonIcon, SunIcon } from '@chakra-ui/icons';
 import {
-  Link,
+  Avatar,
   Box,
-  useColorModeValue,
-  useDisclosure,
+  Button,
+  Container,
   Flex,
-  IconButton,
   HStack,
+  IconButton,
+  Link,
   Menu,
   MenuButton,
-  Button,
-  Avatar,
-  MenuList,
-  MenuItem,
   MenuDivider,
+  MenuItem,
+  MenuList,
   Stack,
-  Container,
   useColorMode,
+  useColorModeValue,
+  useDisclosure,
 } from '@chakra-ui/react';
-import { HamburgerIcon, CloseIcon, MoonIcon, SunIcon } from '@chakra-ui/icons';
-import { Link as ReactRouterLink } from 'react-router-dom';
-import NavLink from '../components/NavLink';
 import { CodeResponse, useGoogleLogin } from '@react-oauth/google';
+import { useSelector } from 'react-redux';
+import { Link as ReactRouterLink } from 'react-router-dom';
 import {
   useLoginMutation,
   useLogoutMutation,
-} from '../features/auth/authApiSlice';
-import GoogleSignInButton from '../components/GoogleSignInButton';
-import { selectCurrentUser } from '../features/auth/userSlice';
-import { useSelector } from 'react-redux';
+} from '../redux/slices/authApiSlice';
+import { selectCurrentUser } from '../redux/slices/userSlice';
+import GoogleSignInButton from './common/GoogleSignInButton';
+import NavLink from './common/NavLink';
 
 const links = ['Applications', 'Organizations'];
 

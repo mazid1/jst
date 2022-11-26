@@ -1,11 +1,11 @@
-import { fetchBaseQuery } from '@reduxjs/toolkit/query';
 import type {
   BaseQueryFn,
   FetchArgs,
   FetchBaseQueryError,
 } from '@reduxjs/toolkit/query';
-import { resetUser } from '../auth/userSlice';
+import { fetchBaseQuery } from '@reduxjs/toolkit/query';
 import { Mutex } from 'async-mutex';
+import { resetUser } from '../slices/userSlice';
 
 // create a new mutex
 const mutex = new Mutex();

@@ -1,6 +1,6 @@
 import { FetchBaseQueryError } from '@reduxjs/toolkit/dist/query/fetchBaseQuery';
 import { apiSlice } from '../api/apiSlice';
-import { User, resetUser, setUser } from './userSlice';
+import { resetUser, setUser, User } from './userSlice';
 
 export const authApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
