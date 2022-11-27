@@ -10,7 +10,7 @@ interface Props {
 const RequireAuth = ({ children }: Props) => {
   const user = useSelector(selectCurrentUser);
 
-  if (!user) return <Navigate to={'/'} replace />;
+  if (!user) return <Navigate to={'/login'} replace />;
 
   return children ? children : <Outlet />;
 };
