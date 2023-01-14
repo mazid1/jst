@@ -6,18 +6,8 @@ import {
   Text,
   useColorModeValue,
 } from '@chakra-ui/react';
-import React from 'react';
 import { IconType } from 'react-icons';
-import {
-  FiBell,
-  FiChevronDown,
-  FiCompass,
-  FiHome,
-  FiMenu,
-  FiSettings,
-  FiStar,
-  FiTrendingUp,
-} from 'react-icons/fi';
+import { BsBriefcase, BsFileText } from 'react-icons/bs';
 import Footer from '../Footer';
 import NavItem from './NavItem';
 
@@ -26,16 +16,14 @@ interface SidebarProps extends BoxProps {
 }
 
 interface LinkItemProps {
-  name: string;
+  label: string;
   icon: IconType;
+  url: string;
 }
 
 const LinkItems: Array<LinkItemProps> = [
-  { name: 'Home', icon: FiHome },
-  { name: 'Trending', icon: FiTrendingUp },
-  { name: 'Explore', icon: FiCompass },
-  { name: 'Favourites', icon: FiStar },
-  { name: 'Settings', icon: FiSettings },
+  { label: 'Applications', icon: BsFileText, url: 'applications' },
+  { label: 'Organizations', icon: BsBriefcase, url: 'organizations' },
 ];
 
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
@@ -68,8 +56,8 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
           />
         </Flex>
         {LinkItems.map((link) => (
-          <NavItem key={link.name} icon={link.icon}>
-            {link.name}
+          <NavItem key={link.label} icon={link.icon} url={link.url}>
+            {link.label}
           </NavItem>
         ))}
         <Footer mt="auto" />

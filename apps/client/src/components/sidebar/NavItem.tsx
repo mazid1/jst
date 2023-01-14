@@ -1,16 +1,16 @@
 import { Flex, FlexProps, Icon, Link } from '@chakra-ui/react';
-import React from 'react';
 import { IconType } from 'react-icons';
 
 interface NavItemProps extends FlexProps {
   icon: IconType;
+  url: string;
   children: string | number;
 }
 
-const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
+const NavItem = ({ icon, url, children, ...rest }: NavItemProps) => {
   return (
     <Link
-      href="#"
+      href={url}
       style={{ textDecoration: 'none' }}
       _focus={{ boxShadow: 'none' }}
     >
