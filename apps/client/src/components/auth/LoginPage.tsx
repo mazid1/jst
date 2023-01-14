@@ -23,11 +23,7 @@ const LoginPage = () => {
     scope: 'openid email profile https://www.googleapis.com/auth/drive.appdata',
   });
 
-  return (
-    <div>
-      <GoogleSignInButton onClick={requestUserConsent} />
-    </div>
-  );
+  return <GoogleSignInButton onClick={requestUserConsent} />;
 };
 
 export default LoginPage;

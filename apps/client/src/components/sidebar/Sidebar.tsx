@@ -6,8 +6,8 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import React, { ReactNode } from 'react';
-import MobileNav from './MobileNav';
 import SidebarContent from './SidebarContent';
+import Topbar from './Topbar';
 
 const Sidebar = ({ children }: { children: ReactNode }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -30,9 +30,8 @@ const Sidebar = ({ children }: { children: ReactNode }) => {
           <SidebarContent onClose={onClose} />
         </DrawerContent>
       </Drawer>
-      {/* mobilenav */}
-      <MobileNav onOpen={onOpen} />
-      <Box ml={{ base: 0, md: 60 }} p="4">
+      <Topbar onOpen={onOpen} />
+      <Box as="main" ml={{ base: 0, md: 60 }} p="4">
         {children}
       </Box>
     </Box>
