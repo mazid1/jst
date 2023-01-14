@@ -18,6 +18,7 @@ import {
   FiStar,
   FiTrendingUp,
 } from 'react-icons/fi';
+import Footer from '../Footer';
 import NavItem from './NavItem';
 
 interface SidebarProps extends BoxProps {
@@ -49,17 +50,30 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       h="full"
       {...rest}
     >
-      <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
-        <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
-          JST
-        </Text>
-        <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
+      <Flex flexDirection="column" alignItems="space-between" h="full">
+        <Flex
+          h="20"
+          alignItems="center"
+          px="8"
+          justifyContent="space-between"
+          borderBottomWidth={1}
+          borderColor={useColorModeValue('gray.300', 'gray.600')}
+        >
+          <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
+            JST
+          </Text>
+          <CloseButton
+            display={{ base: 'flex', md: 'none' }}
+            onClick={onClose}
+          />
+        </Flex>
+        {LinkItems.map((link) => (
+          <NavItem key={link.name} icon={link.icon}>
+            {link.name}
+          </NavItem>
+        ))}
+        <Footer mt="auto" />
       </Flex>
-      {LinkItems.map((link) => (
-        <NavItem key={link.name} icon={link.icon}>
-          {link.name}
-        </NavItem>
-      ))}
     </Box>
   );
 };
