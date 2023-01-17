@@ -1,4 +1,4 @@
-import { Box, Container, Progress } from '@chakra-ui/react';
+import { Progress } from '@chakra-ui/react';
 import { Route, Routes } from 'react-router-dom';
 import ApplicationsList from './components/application/ApplicationsList';
 import LoginPage from './components/auth/LoginPage';
@@ -14,18 +14,16 @@ export function App() {
   if (isLoading) return <Progress size="xs" isIndeterminate />;
 
   return (
-    <>
-      <Sidebar>
-        <Routes>
-          <Route path="/login" element={<LoginPage />} />
-          <Route element={<RequireAuth />}>
-            <Route path="/applications" element={<ApplicationsList />} />
-            <Route path="/organizations" element={<OrganizationsList />} />
-            <Route path="/" element={<Home />} />
-          </Route>
-        </Routes>
-      </Sidebar>
-    </>
+    <Sidebar>
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route element={<RequireAuth />}>
+          <Route path="/applications" element={<ApplicationsList />} />
+          <Route path="/organizations" element={<OrganizationsList />} />
+          <Route path="/" element={<Home />} />
+        </Route>
+      </Routes>
+    </Sidebar>
   );
 }
 
