@@ -1,7 +1,7 @@
 import { Progress } from '@chakra-ui/react';
 import { ReactJSXElement } from '@emotion/react/types/jsx-namespace';
 import { Navigate, Outlet } from 'react-router-dom';
-import { useCurrentUserQuery } from '../../redux/slices/authApiSlice';
+import { useCurrentUserQuery } from '../../redux/api/authApiSlice';
 
 interface Props {
   children?: ReactJSXElement;

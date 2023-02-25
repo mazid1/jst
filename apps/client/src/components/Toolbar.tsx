@@ -21,10 +21,7 @@ import {
 import { CodeResponse, useGoogleLogin } from '@react-oauth/google';
 import { useSelector } from 'react-redux';
 import { Link as ReactRouterLink } from 'react-router-dom';
-import {
-  useLoginMutation,
-  useLogoutMutation,
-} from '../redux/slices/authApiSlice';
+import { useLoginMutation, useLogoutMutation } from '../redux/api/authApiSlice';
 import { selectCurrentUser } from '../redux/slices/userSlice';
 import GoogleSignInButton from './common/GoogleSignInButton';
 import NavLink from './common/NavLink';

@@ -1,6 +1,6 @@
 import { CodeResponse, useGoogleLogin } from '@react-oauth/google';
 import { useNavigate } from 'react-router-dom';
-import { useLoginMutation } from '../../redux/slices/authApiSlice';
+import { useLoginMutation } from '../../redux/api/authApiSlice';
 import GoogleSignInButton from '../common/GoogleSignInButton';
 
 const LoginPage = () => {

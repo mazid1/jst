@@ -1,6 +1,6 @@
 import { Button } from '@chakra-ui/button';
+import { authApiSlice } from '../../redux/api/authApiSlice';
 import { useAppDispatch } from '../../redux/hooks';
-import { authApiSlice } from '../../redux/slices/authApiSlice';
 
 const Home = () => {
   const dispatch = useAppDispatch();
