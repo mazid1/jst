@@ -1,5 +1,6 @@
-import { resetUser, setUser, User } from '../slices/userSlice';
+import { resetUser, User } from '../slices/userSlice';
 import { apiSlice } from './apiSlice';
+import { userApiSlice } from './userApiSlice';
 
 export const authApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -12,7 +13,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled;
-          await dispatch(authApiSlice.endpoints.currentUser.initiate());
+          await dispatch(userApiSlice.endpoints.me.initiate());
         } catch (e) {
           console.log('failed to login', e);
           dispatch(resetUser());
@@ -36,20 +37,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
         }
       },
     }),
-
-    currentUser: builder.query<User, void>({
-      query: () => '/users/me',
-      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
-        try {
-          const { data: user } = await queryFulfilled;
-          dispatch(setUser(user));
-        } catch (e) {
-          dispatch(resetUser());
-        }
-      },
-    }),
   }),
 });
 
-export const { useLoginMutation, useLogoutMutation, useCurrentUserQuery } =
-  authApiSlice;
+export const { useLoginMutation, useLogoutMutation } = authApiSlice;

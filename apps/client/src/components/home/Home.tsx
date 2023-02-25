@@ -1,14 +1,12 @@
 import { Button } from '@chakra-ui/button';
-import { authApiSlice } from '../../redux/api/authApiSlice';
+import { userApiSlice } from '../../redux/api/userApiSlice';
 import { useAppDispatch } from '../../redux/hooks';
 
 const Home = () => {
   const dispatch = useAppDispatch();
 
   const getProfile = async () => {
-    const response = await dispatch(
-      authApiSlice.endpoints.currentUser.initiate()
-    );
+    const response = await dispatch(userApiSlice.endpoints.me.initiate());
     if (response.data) {
       console.log('Profile', response.data);
     } else if (response.error) {
