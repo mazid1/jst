@@ -6,7 +6,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { FaInstagram, FaTwitter, FaYoutube } from 'react-icons/fa';
-import SocialButton from './common/SocialButton';
+import SocialButton from '../common/SocialButton';
 
 const Footer = (props: BoxProps) => {
   return (

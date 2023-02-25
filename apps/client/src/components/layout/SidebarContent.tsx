@@ -8,7 +8,7 @@ import {
 } from '@chakra-ui/react';
 import { IconType } from 'react-icons';
 import { BsBriefcase, BsFileText } from 'react-icons/bs';
-import Footer from '../Footer';
+import Footer from './Footer';
 import NavItem from './NavItem';
 
 interface SidebarProps extends BoxProps {

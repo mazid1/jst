@@ -3,8 +3,8 @@ import ApplicationsList from './components/application/ApplicationsList';
 import LoginPage from './components/auth/LoginPage';
 import RequireAuth from './components/auth/RequireAuth';
 import Home from './components/home/Home';
+import Sidebar from './components/layout/Sidebar';
 import OrganizationsList from './components/organization/OrganizationsList';
-import Sidebar from './components/sidebar/Sidebar';
 import { history } from './helpers/history';
 
 export function App() {

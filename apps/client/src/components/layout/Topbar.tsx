@@ -3,16 +3,10 @@ import {
   FlexProps,
   HStack,
   IconButton,
-  Menu,
-  MenuButton,
-  MenuDivider,
-  MenuItem,
-  MenuList,
   Text,
   useColorModeValue,
-  VStack,
 } from '@chakra-ui/react';
-import { FiBell, FiChevronDown, FiMenu } from 'react-icons/fi';
+import { FiBell, FiMenu } from 'react-icons/fi';
 import UserMenu from '../user/UserMenu';
 
 interface MobileProps extends FlexProps {
