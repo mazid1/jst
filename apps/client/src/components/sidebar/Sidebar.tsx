@@ -5,11 +5,11 @@ import {
   useColorModeValue,
   useDisclosure,
 } from '@chakra-ui/react';
-import React, { ReactNode } from 'react';
+import { Outlet } from 'react-router-dom';
 import SidebarContent from './SidebarContent';
 import Topbar from './Topbar';
 
-const Sidebar = ({ children }: { children: ReactNode }) => {
+const Sidebar = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
@@ -32,7 +32,7 @@ const Sidebar = ({ children }: { children: ReactNode }) => {
       </Drawer>
       <Topbar onOpen={onOpen} />
       <Box as="main" ml={{ base: 0, md: 60 }} p="4">
-        {children}
+        <Outlet />
       </Box>
     </Box>
   );
