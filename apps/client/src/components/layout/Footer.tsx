@@ -1,32 +1,24 @@
 import {
   Box,
-  Container,
+  BoxProps,
   Stack,
-  Text,
   useColorModeValue,
+  VStack,
 } from '@chakra-ui/react';
 import { FaInstagram, FaTwitter, FaYoutube } from 'react-icons/fa';
-import SocialButton from './common/SocialButton';
+import SocialButton from '../common/SocialButton';
 
-const Footer = () => {
+const Footer = (props: BoxProps) => {
   return (
     <Box
-      bg={useColorModeValue('gray.100', 'gray.900')}
-      color={useColorModeValue('gray.700', 'gray.200')}
+      as="footer"
+      bg={useColorModeValue('white', 'gray.900')}
+      borderColor={useColorModeValue('gray.300', 'gray.600')}
       borderTopWidth={1}
       borderStyle={'solid'}
-      borderColor={useColorModeValue('gray.300', 'gray.600')}
+      {...props}
     >
-      <Container
-        as={Stack}
-        maxW={'8xl'}
-        py={4}
-        direction={{ base: 'column', md: 'row' }}
-        spacing={4}
-        justify={{ base: 'center', md: 'space-between' }}
-        align={{ base: 'center', md: 'center' }}
-      >
-        <Text>Created with &hearts; by Mazedul Islam</Text>
+      <VStack maxW={'8xl'} py={4} spacing={4}>
         <Stack direction={'row'} spacing={6}>
           <SocialButton label={'Twitter'} href={'#'}>
             <FaTwitter />
@@ -38,7 +30,7 @@ const Footer = () => {
             <FaInstagram />
           </SocialButton>
         </Stack>
-      </Container>
+      </VStack>
     </Box>
   );
 };

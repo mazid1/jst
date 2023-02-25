@@ -1,34 +1,30 @@
-import { Box, Container, Progress } from '@chakra-ui/react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import ApplicationsList from './components/application/ApplicationsList';
+import LoginPage from './components/auth/LoginPage';
 import RequireAuth from './components/auth/RequireAuth';
-import Footer from './components/Footer';
 import Home from './components/home/Home';
+import Sidebar from './components/layout/Sidebar';
 import OrganizationsList from './components/organization/OrganizationsList';
-import Toolbar from './components/Toolbar';
-import { useCurrentUserQuery } from './redux/slices/authApiSlice';
+import { history } from './helpers/history';
 
 export function App() {
-  const { isLoading } = useCurrentUserQuery();
-
-  if (isLoading) return <Progress size="xs" isIndeterminate />;
+  history.navigate = useNavigate();
 
   return (
-    <>
-      <Toolbar />
-      <Box as="main">
-        <Container maxW={'8xl'}>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route element={<RequireAuth />}>
-              <Route path="/applications" element={<ApplicationsList />} />
-              <Route path="/organizations" element={<OrganizationsList />} />
-            </Route>
-          </Routes>
-        </Container>
-      </Box>
-      <Footer />
-    </>
+    <Routes>
+      <Route path="/login" element={<LoginPage />} />
+      <Route
+        element={
+          <RequireAuth>
+            <Sidebar />
+          </RequireAuth>
+        }
+      >
+        <Route path="/applications" element={<ApplicationsList />} />
+        <Route path="/organizations" element={<OrganizationsList />} />
+        <Route path="/" element={<Home />} />
+      </Route>
+    </Routes>
   );
 }
 

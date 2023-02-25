@@ -5,6 +5,7 @@ import type {
 } from '@reduxjs/toolkit/query';
 import { fetchBaseQuery } from '@reduxjs/toolkit/query';
 import { Mutex } from 'async-mutex';
+import { history } from '../../helpers/history';
 import { resetUser } from '../slices/userSlice';
 
 // create a new mutex
@@ -36,6 +37,8 @@ export const baseQueryWithReauth: BaseQueryFn<
           result = await baseQuery(args, api, extraOptions);
         } else {
           api.dispatch(resetUser());
+          // navigate to login page if refresh token fails
+          history.navigate?.('/login');
         }
       } finally {
         // release must be called once the mutex should be released again.
