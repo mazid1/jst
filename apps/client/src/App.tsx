@@ -1,15 +1,15 @@
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import ApplicationsList from './components/application/ApplicationsList';
 import LoginPage from './components/auth/LoginPage';
 import RequireAuth from './components/auth/RequireAuth';
 import Home from './components/home/Home';
 import OrganizationsList from './components/organization/OrganizationsList';
 import Sidebar from './components/sidebar/Sidebar';
+import { history } from './helpers/history';
 
 export function App() {
-  // const { isLoading } = useCurrentUserQuery();
-
-  // if (isLoading) return <Progress size="xs" isIndeterminate />;
+  history.navigate = useNavigate();
+  history.location = useLocation();
 
   return (
     <Routes>
