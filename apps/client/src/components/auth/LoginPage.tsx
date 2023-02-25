@@ -1,5 +1,6 @@
 import { CodeResponse, useGoogleLogin } from '@react-oauth/google';
 import { useNavigate } from 'react-router-dom';
+import { history } from '../../helpers/history';
 import { useLoginMutation } from '../../redux/api/authApiSlice';
 import GoogleSignInButton from '../common/GoogleSignInButton';
 
@@ -12,7 +13,7 @@ const LoginPage = () => {
     try {
       const { name, email, picture } = await login({ code }).unwrap();
       console.log(name, email, picture);
-      navigate('/', { replace: true });
+      navigate(history.location ?? '/', { replace: true });
     } catch (err) {
       console.log(err);
     }

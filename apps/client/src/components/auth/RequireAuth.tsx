@@ -1,6 +1,7 @@
 import { Progress } from '@chakra-ui/react';
 import { ReactJSXElement } from '@emotion/react/types/jsx-namespace';
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
+import { history } from '../../helpers/history';
 import { useMeQuery } from '../../redux/api/userApiSlice';
 
 interface Props {
@@ -8,11 +9,12 @@ interface Props {
 }
 
 const RequireAuth = ({ children }: Props) => {
+  history.location = useLocation();
   const { isLoading, data: user } = useMeQuery();
 
   if (isLoading) return <Progress size="xs" isIndeterminate />;
 
-  if (!user) return <Navigate to={'/login'} replace />;
+  if (!user) return <Navigate to={'/login'} />;
 
   return children ? children : <Outlet />;
 };

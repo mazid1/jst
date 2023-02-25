@@ -1,4 +1,4 @@
-import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import ApplicationsList from './components/application/ApplicationsList';
 import LoginPage from './components/auth/LoginPage';
 import RequireAuth from './components/auth/RequireAuth';
@@ -9,7 +9,6 @@ import { history } from './helpers/history';
 
 export function App() {
   history.navigate = useNavigate();
-  history.location = useLocation();
 
   return (
     <Routes>
