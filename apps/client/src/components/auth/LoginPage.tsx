@@ -1,3 +1,4 @@
+import { Center } from '@chakra-ui/react';
 import { CodeResponse, useGoogleLogin } from '@react-oauth/google';
 import { useNavigate } from 'react-router-dom';
 import { history } from '../../helpers/history';
@@ -26,7 +27,11 @@ const LoginPage = () => {
     scope: 'openid email profile https://www.googleapis.com/auth/drive.appdata',
   });
 
-  return <GoogleSignInButton onClick={requestUserConsent} />;
+  return (
+    <Center h="100vh">
+      <GoogleSignInButton onClick={requestUserConsent} />
+    </Center>
+  );
 };
 
 export default LoginPage;
