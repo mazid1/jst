@@ -1,4 +1,3 @@
-import { FetchBaseQueryError } from '@reduxjs/toolkit/dist/query/fetchBaseQuery';
 import { apiSlice } from '../api/apiSlice';
 import { resetUser, setUser, User } from './userSlice';
 
@@ -12,8 +11,8 @@ export const authApiSlice = apiSlice.injectEndpoints({
       }),
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
-          const { data: user } = await queryFulfilled;
-          dispatch(setUser(user));
+          await queryFulfilled;
+          await dispatch(authApiSlice.endpoints.currentUser.initiate());
         } catch (e) {
           console.log('failed to login', e);
           dispatch(resetUser());
@@ -39,14 +38,14 @@ export const authApiSlice = apiSlice.injectEndpoints({
     }),
 
     currentUser: builder.query<User, void>({
-      async queryFn(arg, api, extraOptions, baseQuery) {
-        const userResult = await baseQuery('/users/me');
-
-        return userResult.data
-          ? {
-              data: userResult.data as User,
-            }
-          : { error: userResult.error as FetchBaseQueryError };
+      query: () => '/users/me',
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          const { data: user } = await queryFulfilled;
+          dispatch(setUser(user));
+        } catch (e) {
+          dispatch(resetUser());
+        }
       },
     }),
   }),
