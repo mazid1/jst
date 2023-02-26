@@ -7,6 +7,7 @@ import { fetchBaseQuery } from '@reduxjs/toolkit/query';
 import { Mutex } from 'async-mutex';
 import { history } from '../../helpers/history';
 import { resetUser } from '../slices/userSlice';
+import { apiSlice } from './apiSlice';
 
 // create a new mutex
 const mutex = new Mutex();
@@ -36,6 +37,8 @@ export const baseQueryWithReauth: BaseQueryFn<
           // retry the initial query
           result = await baseQuery(args, api, extraOptions);
         } else {
+          // reset redux states
+          api.dispatch(apiSlice.util.resetApiState());
           api.dispatch(resetUser());
           // navigate to login page if refresh token fails
           history.navigate?.('/login');
