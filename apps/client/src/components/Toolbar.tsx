@@ -21,7 +21,7 @@ import {
 import { CodeResponse, useGoogleLogin } from '@react-oauth/google';
 import { useSelector } from 'react-redux';
 import { Link as ReactRouterLink } from 'react-router-dom';
-import { useLoginMutation, useLogoutMutation } from '../redux/api/authApiSlice';
+import { useLoginMutation } from '../redux/api/authApiSlice';
 import { selectCurrentUser } from '../redux/slices/userSlice';
 import GoogleSignInButton from './common/GoogleSignInButton';
 import NavLink from './common/NavLink';
@@ -33,7 +33,7 @@ const Toolbar = () => {
   const { colorMode, toggleColorMode } = useColorMode();
 
   const [login] = useLoginMutation();
-  const [logout] = useLogoutMutation();
+  // const [logout] = useLogoutMutation();
 
   const currentUser = useSelector(selectCurrentUser);
 
@@ -54,13 +54,13 @@ const Toolbar = () => {
     scope: 'openid email profile https://www.googleapis.com/auth/drive.appdata',
   });
 
-  const startLogout = async () => {
-    try {
-      await logout().unwrap();
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  // const startLogout = async () => {
+  //   try {
+  //     await logout().unwrap();
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
   const loginButton = <GoogleSignInButton onClick={requestUserConsent} />;
 
@@ -78,7 +78,7 @@ const Toolbar = () => {
       <MenuList>
         <MenuItem>Account</MenuItem>
         <MenuDivider />
-        <MenuItem onClick={startLogout}>Logout</MenuItem>
+        {/* <MenuItem onClick={startLogout}>Logout</MenuItem> */}
       </MenuList>
     </Menu>
   );

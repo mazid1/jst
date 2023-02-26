@@ -24,7 +24,7 @@ export const userSlice = createSlice({
       state.currentUser = { name, email, picture };
     },
     resetUser: (state) => {
-      state = initialState;
+      state.currentUser = null;
     },
   },
 });

@@ -1,3 +1,4 @@
+import { history } from '../../helpers/history';
 import { resetUser, User } from '../slices/userSlice';
 import { apiSlice } from './apiSlice';
 import { userApiSlice } from './userApiSlice';
@@ -29,9 +30,12 @@ export const authApiSlice = apiSlice.injectEndpoints({
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled;
+          // navigate to login page once logout succeeded
+          history.navigate?.('/login');
         } catch (e) {
           console.log('failed to logout', e);
         } finally {
+          // reset redux states
           dispatch(apiSlice.util.resetApiState());
           dispatch(resetUser());
         }
