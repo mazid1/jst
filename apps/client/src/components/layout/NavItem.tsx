@@ -1,4 +1,10 @@
-import { Flex, FlexProps, Icon, Link } from '@chakra-ui/react';
+import {
+  Flex,
+  FlexProps,
+  Icon,
+  Link,
+  useColorModeValue,
+} from '@chakra-ui/react';
 import { IconType } from 'react-icons';
 import { Link as ReactRouterLink } from 'react-router-dom';
 
@@ -24,7 +30,7 @@ const NavItem = ({ icon, url, children, ...rest }: NavItemProps) => {
         role="group"
         cursor="pointer"
         _hover={{
-          bg: 'cyan.400',
+          bg: useColorModeValue('teal.400', 'teal.700'),
           color: 'white',
         }}
         {...rest}

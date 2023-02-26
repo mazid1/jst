@@ -1,18 +1,21 @@
+import { HamburgerIcon, MoonIcon, SunIcon } from '@chakra-ui/icons';
 import {
   Flex,
   FlexProps,
   HStack,
   IconButton,
   Text,
+  useColorMode,
   useColorModeValue,
 } from '@chakra-ui/react';
-import { FiBell, FiMenu } from 'react-icons/fi';
 import UserMenu from '../user/UserMenu';
 
 interface MobileProps extends FlexProps {
   onOpen: () => void;
 }
 const Topbar = ({ onOpen, ...rest }: MobileProps) => {
+  const { colorMode, toggleColorMode } = useColorMode();
+
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
@@ -30,7 +33,7 @@ const Topbar = ({ onOpen, ...rest }: MobileProps) => {
         onClick={onOpen}
         variant="outline"
         aria-label="open menu"
-        icon={<FiMenu />}
+        icon={<HamburgerIcon />}
       />
 
       <Text
@@ -42,12 +45,12 @@ const Topbar = ({ onOpen, ...rest }: MobileProps) => {
         JST
       </Text>
 
-      <HStack spacing={{ base: '0', md: '6' }}>
+      <HStack spacing={{ base: '2', md: '6' }}>
         <IconButton
-          size="lg"
-          variant="ghost"
-          aria-label="open menu"
-          icon={<FiBell />}
+          icon={colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
+          onClick={() => toggleColorMode()}
+          aria-label={'Toggle Dark Mode'}
+          variant="outline"
         />
         <UserMenu />
       </HStack>
