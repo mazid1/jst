@@ -48,6 +48,10 @@ export class CreateApplicationDto {
   acceptedDate: Date;
 
   @IsOptional()
+  @IsDateString()
+  deniedDate: Date;
+
+  @IsOptional()
   @IsString()
   notes: string;
 

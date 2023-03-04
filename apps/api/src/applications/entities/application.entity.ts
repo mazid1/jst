@@ -54,6 +54,9 @@ export class Application {
   acceptedDate: Date;
 
   @Prop()
+  deniedDate: Date;
+
+  @Prop()
   notes: string;
 
   @Prop({
