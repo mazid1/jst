@@ -1,9 +1,9 @@
 import { Center } from '@chakra-ui/react';
 import { CodeResponse, useGoogleLogin } from '@react-oauth/google';
 import { useNavigate } from 'react-router-dom';
-import { history } from '../../helpers/history';
-import { useLoginMutation } from '../../redux/api/authApiSlice';
-import GoogleSignInButton from '../common/GoogleSignInButton';
+import GoogleSignInButton from '../components/common/GoogleSignInButton';
+import { history } from '../helpers/history';
+import { useLoginMutation } from '../redux/api/authApiSlice';
 
 const LoginPage = () => {
   const [login] = useLoginMutation();
