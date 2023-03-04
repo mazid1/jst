@@ -5,4 +5,6 @@ export enum ApplicationStatus {
   NEGOTIATING = 'negotiating',
   ACCEPTED = 'accepted',
   REJECTED = 'rejected',
+  DENIED = 'denied',
+  ARCHAIVED = 'archaived',
 }
