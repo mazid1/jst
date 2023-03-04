@@ -1,10 +1,10 @@
 import { Button } from '@chakra-ui/button';
 import { useLocation } from 'react-router-dom';
-import { history } from '../../helpers/history';
-import { userApiSlice } from '../../redux/api/userApiSlice';
-import { useAppDispatch } from '../../redux/hooks';
+import { history } from '../helpers/history';
+import { userApiSlice } from '../redux/api/userApiSlice';
+import { useAppDispatch } from '../redux/hooks';
 
-const Home = () => {
+const HomePage = () => {
   history.location = useLocation();
   const dispatch = useAppDispatch();
 
@@ -25,4 +25,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default HomePage;

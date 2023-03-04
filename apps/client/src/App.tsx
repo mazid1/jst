@@ -1,11 +1,11 @@
 import { Route, Routes, useNavigate } from 'react-router-dom';
-import ApplicationsList from './components/application/ApplicationsList';
 import LoginPage from './components/auth/LoginPage';
 import RequireAuth from './components/auth/RequireAuth';
-import Home from './components/home/Home';
 import Sidebar from './components/layout/Sidebar';
-import OrganizationsList from './components/organization/OrganizationsList';
 import { history } from './helpers/history';
+import ApplicationsPage from './pages/ApplicationsPage';
+import HomePage from './pages/HomePage';
+import OrganizationsPage from './pages/OrganizationsPage';
 
 export function App() {
   history.navigate = useNavigate();
@@ -20,9 +20,9 @@ export function App() {
           </RequireAuth>
         }
       >
-        <Route path="/applications" element={<ApplicationsList />} />
-        <Route path="/organizations" element={<OrganizationsList />} />
-        <Route path="/" element={<Home />} />
+        <Route path="/applications" element={<ApplicationsPage />} />
+        <Route path="/organizations" element={<OrganizationsPage />} />
+        <Route path="/" element={<HomePage />} />
       </Route>
     </Routes>
   );

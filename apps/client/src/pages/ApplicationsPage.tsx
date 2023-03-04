@@ -1,10 +1,10 @@
 import { useLocation } from 'react-router-dom';
-import { history } from '../../helpers/history';
+import { history } from '../helpers/history';
 
-const ApplicationsList = () => {
+const ApplicationsPage = () => {
   history.location = useLocation();
 
   return <div>ApplicationsList</div>;
 };
 
-export default ApplicationsList;
+export default ApplicationsPage;

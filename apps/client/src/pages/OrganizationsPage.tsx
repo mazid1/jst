@@ -1,9 +1,9 @@
 import { Spinner } from '@chakra-ui/react';
 import { useLocation } from 'react-router-dom';
-import { history } from '../../helpers/history';
-import { useGetOrganizationsQuery } from '../../redux/api/organizationApiSlice';
+import { history } from '../helpers/history';
+import { useGetOrganizationsQuery } from '../redux/api/organizationApiSlice';
 
-const OrganizationsList = () => {
+const OrganizationsPage = () => {
   history.location = useLocation();
 
   const {
@@ -33,4 +33,4 @@ const OrganizationsList = () => {
   );
 };
 
-export default OrganizationsList;
+export default OrganizationsPage;
