@@ -1,6 +1,6 @@
 import { Type } from 'class-transformer';
 import {
-  IsDate,
+  IsDateString,
   IsEnum,
   IsMongoId,
   IsNotEmpty,
@@ -36,15 +36,15 @@ export class CreateApplicationDto {
   source: LinkDto;
 
   @IsOptional()
-  @IsDate()
+  @IsDateString()
   appliedDate: Date;
 
   @IsOptional()
-  @IsDate()
+  @IsDateString()
   rejectedDate: Date;
 
   @IsOptional()
-  @IsDate()
+  @IsDateString()
   acceptedDate: Date;
 
   @IsOptional()
