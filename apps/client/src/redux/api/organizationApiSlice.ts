@@ -1,22 +1,27 @@
+import { Organization } from '../../@types';
+import {
+  CreateOrganizationDto,
+  UpdateOrganizationDto,
+} from '../../@types/organization';
 import { apiSlice } from './apiSlice';
 
 export const organizationApiSlice = apiSlice.injectEndpoints({
   endpoints: (build) => ({
-    getOrganizations: build.query({
+    getOrganizations: build.query<Organization[], void>({
       query: () => '/organizations',
       providesTags: (result = [], error, arg) => [
-        ...result.map(({ _id }: { _id: string }) => ({
-          type: 'ORGANIZATION',
+        ...result.map(({ _id }) => ({
+          type: 'ORGANIZATION' as const,
           id: _id,
         })),
         { type: 'ORGANIZATION', id: 'LIST' },
       ],
     }),
-    getOrganization: build.query({
+    getOrganization: build.query<Organization, string>({
       query: (organizationId) => `/organizatins/${organizationId}`,
       providesTags: (result, error, arg) => [{ type: 'ORGANIZATION', id: arg }],
     }),
-    createOrganization: build.mutation({
+    createOrganization: build.mutation<Organization, CreateOrganizationDto>({
       query: (initialOrganization) => ({
         url: '/organizations',
         method: 'POST',
@@ -24,14 +29,17 @@ export const organizationApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: [{ type: 'ORGANIZATION', id: 'LIST' }],
     }),
-    updateOrganization: build.mutation({
-      query: (organization) => ({
-        url: `/organizations/${organization._id}`,
+    updateOrganization: build.mutation<
+      Organization,
+      { org: UpdateOrganizationDto; id: string }
+    >({
+      query: (data) => ({
+        url: `/organizations/${data.id}`,
         method: 'PATCH',
-        body: organization,
+        body: data.org,
       }),
       invalidatesTags: (result, error, arg) => [
-        { type: 'ORGANIZATION', id: arg._id },
+        { type: 'ORGANIZATION', id: arg.id },
       ],
     }),
   }),

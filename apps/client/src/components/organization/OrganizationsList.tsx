@@ -8,7 +8,7 @@ function OrganizationsList() {
     isSuccess,
     isError,
     error,
-  } = useGetOrganizationsQuery(null);
+  } = useGetOrganizationsQuery();
 
   let content;
 

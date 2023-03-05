@@ -1,5 +1,6 @@
+import { User } from '../../@types';
 import { history } from '../../helpers/history';
-import { resetUser, User } from '../slices/userSlice';
+import { resetUser } from '../slices/userSlice';
 import { apiSlice } from './apiSlice';
 import { userApiSlice } from './userApiSlice';
 

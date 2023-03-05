@@ -8,7 +8,7 @@ function ApplicationsList() {
     isSuccess,
     isError,
     error,
-  } = useGetApplicationsQuery(null);
+  } = useGetApplicationsQuery();
 
   let content;
 

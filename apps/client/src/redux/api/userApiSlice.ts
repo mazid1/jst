@@ -1,4 +1,5 @@
-import { resetUser, setUser, User } from '../slices/userSlice';
+import { User } from '../../@types';
+import { resetUser, setUser } from '../slices/userSlice';
 import { apiSlice } from './apiSlice';
 
 export const userApiSlice = apiSlice.injectEndpoints({

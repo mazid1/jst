@@ -9,3 +9,7 @@ export type Organization = {
   linkedinPage?: string; // linkedin page url
   isDeleted?: boolean;
 };
+
+export type CreateOrganizationDto = Omit<Organization, '_id'>;
+
+export type UpdateOrganizationDto = Partial<CreateOrganizationDto>;
