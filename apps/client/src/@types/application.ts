@@ -1,10 +1,10 @@
 import { ApplicationStatus } from './applicationStatus';
+import { BaseEntity } from './baseEntity';
 import { Interview } from './interview';
 import { LinkData } from './linkData';
 import { Organization } from './organization';
 
 export type Application = {
-  _id: string;
   position: string;
   description?: string;
   status: ApplicationStatus;
@@ -17,4 +17,4 @@ export type Application = {
   notes?: string;
   organization?: Organization;
   interviews?: Interview[];
-};
+} & BaseEntity;

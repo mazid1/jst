@@ -1,5 +1,6 @@
+import { BaseEntity } from './baseEntity';
+
 export type Organization = {
-  _id: string;
   name: string;
   location?: string; // state, country etc.
   minSalary?: number; // min salary in usd
@@ -8,7 +9,7 @@ export type Organization = {
   website?: string; // website url
   linkedinPage?: string; // linkedin page url
   isDeleted?: boolean;
-};
+} & BaseEntity;
 
 export type CreateOrganizationDto = Omit<Organization, '_id'>;
 

@@ -1,6 +1,7 @@
+import { BaseEntity } from './baseEntity';
+
 export type User = {
-  _id: string;
   name: string;
   email: string;
   picture?: string;
-};
+} & BaseEntity;

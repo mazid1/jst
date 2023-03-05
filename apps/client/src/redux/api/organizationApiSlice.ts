@@ -1,8 +1,8 @@
-import { Organization } from '../../@types';
 import {
   CreateOrganizationDto,
+  Organization,
   UpdateOrganizationDto,
-} from '../../@types/organization';
+} from '../../@types';
 import { apiSlice } from './apiSlice';
 
 export const organizationApiSlice = apiSlice.injectEndpoints({
