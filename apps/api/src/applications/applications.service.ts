@@ -43,6 +43,6 @@ export class ApplicationsService {
 
   async remove(id: string) {
     const application = await this.findById(id);
-    return application.remove();
+    return application.deleteOne();
   }
 }
