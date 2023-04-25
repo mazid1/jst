@@ -46,7 +46,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
           px="8"
           justifyContent="space-between"
           borderBottomWidth={1}
-          borderColor={useColorModeValue('gray.300', 'gray.600')}
+          borderColor={useColorModeValue('gray.200', 'gray.700')}
         >
           <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
             JST
