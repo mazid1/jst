@@ -1,5 +1,7 @@
 import { Spinner } from '@chakra-ui/react';
 import { useGetOrganizationsQuery } from '../../redux/api/organizationApiSlice';
+import { DataTable } from '../common/DataTable';
+import { columns } from './columnDef';
 
 function OrganizationsList() {
   const {
@@ -10,9 +12,10 @@ function OrganizationsList() {
   } = useGetOrganizationsQuery();
 
   if (isSuccess) {
-    console.log(organizations);
-    return <div>{JSON.stringify(organizations)}</div>;
-  } else if (isError) {
+    return <DataTable columns={columns} data={organizations} />;
+  }
+
+  if (isError) {
     return <div>{error.toString()}</div>;
   }
 
