@@ -8,7 +8,7 @@ export const { accessor: createColumn } = createColumnHelper<Organization>();
 export const columns = [
   createColumn('name', { header: 'Name' }),
   createColumn('location', { header: 'Location' }),
-  createColumn('companySize', { header: 'Size' }),
+  createColumn('size', { header: 'Size' }),
   createColumn('minSalary', { header: 'Min Salary' }),
   createColumn('maxSalary', { header: 'Max Salary' }),
   createColumn('website', {

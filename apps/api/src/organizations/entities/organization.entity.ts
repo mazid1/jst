@@ -24,7 +24,7 @@ export class Organization {
   maxSalary: number; // max salary in usd
 
   @Prop()
-  companySize: string; // i.e. 50-100
+  size: string; // i.e. 50-100
 
   @Prop()
   website: string; // website url

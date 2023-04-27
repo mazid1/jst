@@ -26,7 +26,7 @@ export class CreateOrganizationDto {
 
   @IsOptional()
   @IsString()
-  companySize: string;
+  size: string;
 
   @IsOptional()
   @IsUrl()
