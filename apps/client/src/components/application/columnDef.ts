@@ -1,27 +1,15 @@
 import { createColumnHelper } from '@tanstack/react-table';
 import { Application } from '../../@types';
 
-const columnHelper = createColumnHelper<Application>();
+const { accessor: createColumn } = createColumnHelper<Application>();
 
 export const columns = [
-  columnHelper.accessor('position', {
-    cell: (info) => info.getValue(),
-    header: 'Position',
-  }),
-  columnHelper.accessor('organization.name', {
-    cell: (info) => info.getValue(),
-    header: 'Company',
-  }),
-  columnHelper.accessor('location', {
-    cell: (info) => info.getValue(),
-    header: 'Location',
-  }),
-  columnHelper.accessor('status', {
-    cell: (info) => info.getValue(),
-    header: 'Status',
-  }),
-  columnHelper.accessor('interviews', {
-    cell: (info) => info.getValue()?.at(0)?.dateTime,
+  createColumn('position', { header: 'Position' }),
+  createColumn('organization.name', { header: 'Company' }),
+  createColumn('location', { header: 'Location' }),
+  createColumn('status', { header: 'Status' }),
+  createColumn('interviews', {
     header: 'Next Interview',
+    cell: (info) => info.getValue()?.at(0)?.dateTime,
   }),
 ];
