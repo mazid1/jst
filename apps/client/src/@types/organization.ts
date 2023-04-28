@@ -11,6 +11,6 @@ export type Organization = {
   isDeleted?: boolean;
 } & BaseEntity;
 
-export type CreateOrganizationDto = Omit<Organization, '_id'>;
+export type CreateOrganizationDto = Omit<Organization, keyof BaseEntity>;
 
 export type UpdateOrganizationDto = Partial<CreateOrganizationDto>;
