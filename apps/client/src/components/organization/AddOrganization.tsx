@@ -10,6 +10,7 @@ import {
   ModalOverlay,
   useDisclosure,
 } from '@chakra-ui/react';
+import OrganizationForm, { ORGANIZATION_FORM_ID } from './OrganizationForm';
 
 function AddOrganization() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -25,13 +26,21 @@ function AddOrganization() {
         <ModalContent>
           <ModalHeader>Add a new organization</ModalHeader>
           <ModalCloseButton />
-          <ModalBody>Form body will go here.</ModalBody>
+          <ModalBody>
+            <OrganizationForm />
+          </ModalBody>
 
           <ModalFooter>
             <Button variant="ghost" mr={3} onClick={onClose}>
               Cancel
             </Button>
-            <Button colorScheme="teal">Save Organization</Button>
+            <Button
+              colorScheme="teal"
+              type="submit"
+              form={ORGANIZATION_FORM_ID}
+            >
+              Save Organization
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
