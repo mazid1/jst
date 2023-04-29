@@ -3,10 +3,13 @@ import {
   FormErrorMessage,
   FormLabel,
   Input,
+  Text,
+  useToast,
 } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { ServerError } from '../../@types/serverError';
 import { asOptionalField } from '../../helpers/zodHelper';
 import { useCreateOrganizationMutation } from '../../redux/api/organizationApiSlice';
 
@@ -37,13 +40,36 @@ function OrganizationForm({ onSuccess }: OrganizationFormProps) {
 
   const [createOrganization] = useCreateOrganizationMutation();
 
+  const toast = useToast();
+
   const onSubmit: SubmitHandler<OrganizationSchema> = async (data) => {
     try {
-      const createdOrganization = await createOrganization(data).unwrap();
-      console.log('created', createdOrganization);
+      const newOrganization = await createOrganization(data).unwrap();
+      toast({
+        title: 'Created.',
+        description: (
+          <Text>
+            <strong>{newOrganization.name}</strong> organization created.
+          </Text>
+        ),
+        status: 'success',
+        isClosable: true,
+      });
       onSuccess();
     } catch (error) {
-      console.log('rejected', error);
+      const serverError = error as ServerError;
+      const { statusCode, message } = serverError;
+      if (statusCode !== 401) {
+        const description =
+          typeof message === 'string' ? message : message.join(', ');
+        toast({
+          title: 'Failed.',
+          description:
+            description || 'Unknown error occured, please try again.',
+          status: 'error',
+          isClosable: true,
+        });
+      }
     }
   };
 
