@@ -24,7 +24,11 @@ const schema = z.object({
 
 type OrganizationSchema = z.infer<typeof schema>;
 
-function OrganizationForm() {
+type OrganizationFormProps = {
+  onSuccess: () => void;
+};
+
+function OrganizationForm({ onSuccess }: OrganizationFormProps) {
   const {
     register,
     handleSubmit,
@@ -37,6 +41,7 @@ function OrganizationForm() {
     try {
       const createdOrganization = await createOrganization(data).unwrap();
       console.log('created', createdOrganization);
+      onSuccess();
     } catch (error) {
       console.log('rejected', error);
     }

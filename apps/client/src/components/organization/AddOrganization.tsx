@@ -27,7 +27,7 @@ function AddOrganization() {
           <ModalHeader>Add a new organization</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <OrganizationForm />
+            <OrganizationForm onSuccess={onClose} />
           </ModalBody>
 
           <ModalFooter>
