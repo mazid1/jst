@@ -16,9 +16,11 @@ export const columns = [
     cell: ({ getValue }) => {
       const url = getValue();
       return (
-        <Link href={url} isExternal>
-          {url} <ExternalLinkIcon mx="2px" />
-        </Link>
+        url && (
+          <Link href={url} isExternal>
+            {url} <ExternalLinkIcon mx="2px" />
+          </Link>
+        )
       );
     },
   }),
