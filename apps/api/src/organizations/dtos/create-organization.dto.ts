@@ -1,5 +1,4 @@
 import {
-  IsBoolean,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -35,8 +34,4 @@ export class CreateOrganizationDto {
   @IsOptional()
   @IsUrl()
   linkedinPage: string;
-
-  @IsOptional()
-  @IsBoolean()
-  isDeleted: boolean;
 }
