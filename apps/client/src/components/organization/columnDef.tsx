@@ -1,5 +1,5 @@
-import { ExternalLinkIcon } from '@chakra-ui/icons';
-import { Link } from '@chakra-ui/react';
+import { DeleteIcon, EditIcon, ExternalLinkIcon } from '@chakra-ui/icons';
+import { IconButton, Link, Stack, Tooltip } from '@chakra-ui/react';
 import { createColumnHelper } from '@tanstack/react-table';
 import { Organization } from '../../@types';
 
@@ -34,6 +34,33 @@ export const columns = [
             {url} <ExternalLinkIcon mx="2px" />
           </Link>
         )
+      );
+    },
+  }),
+  createColumn('_id', {
+    header: 'Actions',
+    cell: ({ getValue }) => {
+      const id = getValue();
+      return (
+        <Stack direction="row">
+          <Tooltip label="Edit" aria-label="Edit">
+            <IconButton
+              icon={<EditIcon />}
+              aria-label="Edit"
+              colorScheme="teal"
+              onClick={() => console.log('Edit', id)}
+            />
+          </Tooltip>
+
+          <Tooltip label="Delete" aria-label="Delete">
+            <IconButton
+              icon={<DeleteIcon />}
+              aria-label="Delete"
+              colorScheme="red"
+              onClick={() => console.log('Delete', id)}
+            />
+          </Tooltip>
+        </Stack>
       );
     },
   }),
