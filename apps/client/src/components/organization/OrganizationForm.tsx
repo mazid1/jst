@@ -7,29 +7,40 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { CreateOrganizationDto } from '../../@types';
+import { asOptionalField } from '../../helpers/zodHelper';
+import { useCreateOrganizationMutation } from '../../redux/api/organizationApiSlice';
 
 export const ORGANIZATION_FORM_ID = 'organizationForm';
 
 const schema = z.object({
   name: z.string().nonempty('Name is required'),
-  location: z.string(),
-  size: z.string(),
+  location: asOptionalField(z.string().nonempty()),
+  size: asOptionalField(z.string().nonempty()),
   minSalary: z.number().nonnegative().optional(),
   maxSalary: z.number().nonnegative().optional(),
-  website: z.string().url().optional().or(z.literal('')),
-  linkedinPage: z.string().url().optional().or(z.literal('')),
+  website: asOptionalField(z.string().url()),
+  linkedinPage: asOptionalField(z.string().url()),
 });
+
+type OrganizationSchema = z.infer<typeof schema>;
 
 function OrganizationForm() {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<CreateOrganizationDto>({ resolver: zodResolver(schema) });
+  } = useForm<OrganizationSchema>({ resolver: zodResolver(schema) });
 
-  const onSubmit: SubmitHandler<CreateOrganizationDto> = (data) =>
-    console.log(data);
+  const [createOrganization] = useCreateOrganizationMutation();
+
+  const onSubmit: SubmitHandler<OrganizationSchema> = async (data) => {
+    try {
+      const createdOrganization = await createOrganization(data).unwrap();
+      console.log('created', createdOrganization);
+    } catch (error) {
+      console.log('rejected', error);
+    }
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} id={ORGANIZATION_FORM_ID}>
@@ -56,7 +67,7 @@ function OrganizationForm() {
         <Input
           type="number"
           {...register('minSalary', {
-            setValueAs: (v) => (v ? parseFloat(v) : undefined),
+            setValueAs: (v) => (v ? Number(v) : undefined),
           })}
         />
         <FormErrorMessage>{errors.minSalary?.message}</FormErrorMessage>
@@ -67,7 +78,7 @@ function OrganizationForm() {
         <Input
           type="number"
           {...register('maxSalary', {
-            setValueAs: (v) => (v ? parseFloat(v) : undefined),
+            setValueAs: (v) => (v ? Number(v) : undefined),
           })}
         />
         <FormErrorMessage>{errors.maxSalary?.message}</FormErrorMessage>
