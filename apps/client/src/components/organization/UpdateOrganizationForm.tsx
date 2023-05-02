@@ -8,48 +8,44 @@ import {
 } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { z } from 'zod';
 import { ServerError } from '../../@types/serverError';
-import { asOptionalField } from '../../helpers/zodHelper';
-import { useCreateOrganizationMutation } from '../../redux/api/organizationApiSlice';
+import { useUpdateOrganizationMutation } from '../../redux/api/organizationApiSlice';
+import {
+  OrganizationSchema,
+  schema as organizationZodSchema,
+} from './OrganizationForm';
 
-export const ORGANIZATION_FORM_ID = 'organizationForm';
+export const EDIT_ORGANIZATION_FORM_ID = 'editOrganizationForm';
 
-export const schema = z.object({
-  name: z.string().nonempty('Name is required'),
-  location: asOptionalField(z.string().nonempty()),
-  size: asOptionalField(z.string().nonempty()),
-  minSalary: z.number().nonnegative().optional(),
-  maxSalary: z.number().nonnegative().optional(),
-  website: asOptionalField(z.string().url()),
-  linkedinPage: asOptionalField(z.string().url()),
-});
-
-export type OrganizationSchema = z.infer<typeof schema>;
-
-export type OrganizationFormProps = {
+type EditOrganizationFormProps = {
+  id: string;
   onSuccess: () => void;
 };
 
-function OrganizationForm({ onSuccess }: OrganizationFormProps) {
+function UpdateOrganizationForm({ id, onSuccess }: EditOrganizationFormProps) {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<OrganizationSchema>({ resolver: zodResolver(schema) });
+  } = useForm<OrganizationSchema>({
+    resolver: zodResolver(organizationZodSchema),
+  });
 
-  const [createOrganization] = useCreateOrganizationMutation();
+  const [editOrganization] = useUpdateOrganizationMutation();
 
   const toast = useToast();
 
   const onSubmit: SubmitHandler<OrganizationSchema> = async (data) => {
     try {
-      const newOrganization = await createOrganization(data).unwrap();
+      const newOrganization = await editOrganization({
+        org: data,
+        id,
+      }).unwrap();
       toast({
-        title: 'Created.',
+        title: 'Updated.',
         description: (
           <Text>
-            <strong>{newOrganization.name}</strong> organization created.
+            <strong>{newOrganization.name}</strong> organization updated.
           </Text>
         ),
         status: 'success',
@@ -74,7 +70,7 @@ function OrganizationForm({ onSuccess }: OrganizationFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} id={ORGANIZATION_FORM_ID}>
+    <form onSubmit={handleSubmit(onSubmit)} id={EDIT_ORGANIZATION_FORM_ID}>
       <FormControl isInvalid={!!errors.name}>
         <FormLabel>Name</FormLabel>
         <Input type="text" {...register('name', { required: true })} />
@@ -130,4 +126,4 @@ function OrganizationForm({ onSuccess }: OrganizationFormProps) {
   );
 }
 
-export default OrganizationForm;
+export default UpdateOrganizationForm;
