@@ -9,6 +9,7 @@ import {
   ModalOverlay,
 } from '@chakra-ui/react';
 import { ReactNode } from 'react';
+import { Organization } from '../../@types';
 import OrganizationForm, { ORGANIZATION_FORM_ID } from './OrganizationForm';
 
 type OrganizationFormModalProps = {
@@ -17,6 +18,7 @@ type OrganizationFormModalProps = {
   headerText: string | ReactNode; // i.e. Add a new organization
   cancelButtonText?: string;
   saveButtonText?: string;
+  organization?: Organization;
 };
 
 function OrganizationFormModal(props: OrganizationFormModalProps) {
@@ -26,6 +28,7 @@ function OrganizationFormModal(props: OrganizationFormModalProps) {
     headerText,
     cancelButtonText = 'Cancel',
     saveButtonText = 'Save',
+    organization,
   } = props;
 
   return (
@@ -35,7 +38,7 @@ function OrganizationFormModal(props: OrganizationFormModalProps) {
         <ModalHeader>{headerText}</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <OrganizationForm onSuccess={onClose} />
+          <OrganizationForm onSuccess={onClose} organization={organization} />
         </ModalBody>
 
         <ModalFooter>

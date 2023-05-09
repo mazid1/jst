@@ -9,9 +9,13 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { Organization } from '../../@types';
 import { ServerError } from '../../@types/serverError';
 import { asOptionalField } from '../../helpers/zodHelper';
-import { useCreateOrganizationMutation } from '../../redux/api/organizationApiSlice';
+import {
+  useCreateOrganizationMutation,
+  useUpdateOrganizationMutation,
+} from '../../redux/api/organizationApiSlice';
 
 export const ORGANIZATION_FORM_ID = 'organizationForm';
 
@@ -29,27 +33,36 @@ export type OrganizationSchema = z.infer<typeof schema>;
 
 export type OrganizationFormProps = {
   onSuccess: () => void;
+  organization?: Organization;
 };
 
-function OrganizationForm({ onSuccess }: OrganizationFormProps) {
+function OrganizationForm({ onSuccess, organization }: OrganizationFormProps) {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<OrganizationSchema>({ resolver: zodResolver(schema) });
+  } = useForm<OrganizationSchema>({
+    resolver: zodResolver(schema),
+    values: organization,
+  });
 
   const [createOrganization] = useCreateOrganizationMutation();
+  const [updateOrganization] = useUpdateOrganizationMutation();
 
   const toast = useToast();
 
   const onSubmit: SubmitHandler<OrganizationSchema> = async (data) => {
+    const isUpdating = !!organization;
     try {
-      const newOrganization = await createOrganization(data).unwrap();
+      const newOrganization = isUpdating
+        ? await updateOrganization({ org: data, id: organization._id }).unwrap()
+        : await createOrganization(data).unwrap();
       toast({
-        title: 'Created.',
+        title: isUpdating ? 'Updated' : 'Created.',
         description: (
           <Text>
-            <strong>{newOrganization.name}</strong> organization created.
+            <strong>{newOrganization.name}</strong> organization{' '}
+            {isUpdating ? 'updated' : 'created'}.
           </Text>
         ),
         status: 'success',
