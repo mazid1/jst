@@ -8,61 +8,44 @@ import {
 } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { Organization } from '../../@types';
 import { ServerError } from '../../@types/serverError';
-import { asOptionalField } from '../../helpers/zodHelper';
+import { useUpdateOrganizationMutation } from '../../redux/api/organizationApiSlice';
 import {
-  useCreateOrganizationMutation,
-  useUpdateOrganizationMutation,
-} from '../../redux/api/organizationApiSlice';
+  OrganizationSchema,
+  schema as organizationZodSchema,
+} from './OrganizationForm';
 
-export const ORGANIZATION_FORM_ID = 'organizationForm';
+export const EDIT_ORGANIZATION_FORM_ID = 'editOrganizationForm';
 
-export const schema = z.object({
-  name: z.string().nonempty('Name is required'),
-  location: asOptionalField(z.string().nonempty()),
-  size: asOptionalField(z.string().nonempty()),
-  minSalary: z.number().nonnegative().optional(),
-  maxSalary: z.number().nonnegative().optional(),
-  website: asOptionalField(z.string().url()),
-  linkedinPage: asOptionalField(z.string().url()),
-});
-
-export type OrganizationSchema = z.infer<typeof schema>;
-
-export type OrganizationFormProps = {
+type EditOrganizationFormProps = {
+  id: string;
   onSuccess: () => void;
-  organization?: Organization;
 };
 
-function OrganizationForm({ onSuccess, organization }: OrganizationFormProps) {
+function UpdateOrganizationForm({ id, onSuccess }: EditOrganizationFormProps) {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<OrganizationSchema>({
-    resolver: zodResolver(schema),
-    values: organization,
+    resolver: zodResolver(organizationZodSchema),
   });
 
-  const [createOrganization] = useCreateOrganizationMutation();
-  const [updateOrganization] = useUpdateOrganizationMutation();
+  const [editOrganization] = useUpdateOrganizationMutation();
 
   const toast = useToast();
 
   const onSubmit: SubmitHandler<OrganizationSchema> = async (data) => {
-    const isUpdating = !!organization;
     try {
-      const newOrganization = isUpdating
-        ? await updateOrganization({ org: data, id: organization._id }).unwrap()
-        : await createOrganization(data).unwrap();
+      const newOrganization = await editOrganization({
+        org: data,
+        id,
+      }).unwrap();
       toast({
-        title: isUpdating ? 'Updated' : 'Created.',
+        title: 'Updated.',
         description: (
           <Text>
-            <strong>{newOrganization.name}</strong> organization{' '}
-            {isUpdating ? 'updated' : 'created'}.
+            <strong>{newOrganization.name}</strong> organization updated.
           </Text>
         ),
         status: 'success',
@@ -87,7 +70,7 @@ function OrganizationForm({ onSuccess, organization }: OrganizationFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} id={ORGANIZATION_FORM_ID}>
+    <form onSubmit={handleSubmit(onSubmit)} id={EDIT_ORGANIZATION_FORM_ID}>
       <FormControl isInvalid={!!errors.name}>
         <FormLabel>Name</FormLabel>
         <Input type="text" {...register('name', { required: true })} />
@@ -143,4 +126,4 @@ function OrganizationForm({ onSuccess, organization }: OrganizationFormProps) {
   );
 }
 
-export default OrganizationForm;
+export default UpdateOrganizationForm;
