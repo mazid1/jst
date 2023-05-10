@@ -6,11 +6,16 @@ import {
   Stack,
   Tooltip,
   useDisclosure,
+  useToast,
 } from '@chakra-ui/react';
 import { createColumnHelper } from '@tanstack/react-table';
 import { useState } from 'react';
 import { Organization } from '../../@types';
-import { useGetOrganizationsQuery } from '../../redux/api/organizationApiSlice';
+import { handleError } from '../../helpers/handleError';
+import {
+  useDeleteOrganizationMutation,
+  useGetOrganizationsQuery,
+} from '../../redux/api/organizationApiSlice';
 import { DataTable } from '../common/DataTable';
 import OrganizationFormModal from './OrganizationFormModal';
 
@@ -23,9 +28,26 @@ function OrganizationsList() {
     isError,
     error,
   } = useGetOrganizationsQuery();
+  const [deleteOrganization] = useDeleteOrganizationMutation();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const toast = useToast();
+
   const [selectedOrg, setSelectedOrg] = useState<Organization>();
+
+  const handleDeleteOrganization = async (id: string) => {
+    try {
+      await deleteOrganization(id);
+      toast({
+        title: 'Deleted.',
+        description: 'Organization is deleted successfully.',
+        status: 'success',
+        isClosable: true,
+      });
+    } catch (error) {
+      handleError(error, toast);
+    }
+  };
 
   const columns = [
     createColumn('name', { header: 'Name' }),
@@ -82,7 +104,7 @@ function OrganizationsList() {
                 icon={<DeleteIcon />}
                 aria-label="Delete"
                 colorScheme="red"
-                onClick={() => console.log('Delete', id)}
+                onClick={() => handleDeleteOrganization(id)}
               />
             </Tooltip>
           </Stack>

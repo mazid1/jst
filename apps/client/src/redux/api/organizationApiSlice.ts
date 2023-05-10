@@ -42,6 +42,13 @@ export const organizationApiSlice = apiSlice.injectEndpoints({
         { type: 'ORGANIZATION', id: arg.id },
       ],
     }),
+    deleteOrganization: build.mutation<void, string>({
+      query: (organizationId) => ({
+        url: `/organizations/${organizationId}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: [{ type: 'ORGANIZATION', id: 'LIST' }],
+    }),
   }),
 });
 
@@ -50,4 +57,5 @@ export const {
   useGetOrganizationQuery,
   useCreateOrganizationMutation,
   useUpdateOrganizationMutation,
+  useDeleteOrganizationMutation,
 } = organizationApiSlice;
