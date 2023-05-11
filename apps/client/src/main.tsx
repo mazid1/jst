@@ -8,7 +8,7 @@ import App from './App';
 import {
   ConfirmationContextProvider,
   ConfirmationModal,
-} from './components/common/Confirmation';
+} from './components/common/confirmation';
 import { store } from './redux/store';
 import theme from './theme';
 

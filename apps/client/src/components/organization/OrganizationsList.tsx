@@ -17,8 +17,8 @@ import {
   useDeleteOrganizationMutation,
   useGetOrganizationsQuery,
 } from '../../redux/api/organizationApiSlice';
-import { useConfirmation } from '../common/Confirmation';
 import { DataTable } from '../common/DataTable';
+import { useConfirmation } from '../common/confirmation';
 import OrganizationFormModal from './OrganizationFormModal';
 
 export const { accessor: createColumn } = createColumnHelper<Organization>();
