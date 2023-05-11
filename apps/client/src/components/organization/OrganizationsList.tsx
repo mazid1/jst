@@ -16,6 +16,7 @@ import {
   useDeleteOrganizationMutation,
   useGetOrganizationsQuery,
 } from '../../redux/api/organizationApiSlice';
+import useConfirmation from '../common/Confirmation/useConfirmation';
 import { DataTable } from '../common/DataTable';
 import OrganizationFormModal from './OrganizationFormModal';
 
@@ -32,11 +33,22 @@ function OrganizationsList() {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
+  const { ask } = useConfirmation();
 
   const [selectedOrg, setSelectedOrg] = useState<Organization>();
 
   const handleDeleteOrganization = async (id: string) => {
     try {
+      const isConfirmed = await ask({
+        header: 'Delete Organization',
+        prompt:
+          'Do you want to delete this organization? This action can not be undone.',
+        acceptButtonText: 'Delete',
+        rejectButtonText: 'Cancel',
+        isOpen: true,
+      });
+      if (!isConfirmed) return;
+
       await deleteOrganization(id);
       toast({
         title: 'Deleted.',
