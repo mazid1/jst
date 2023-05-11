@@ -16,7 +16,7 @@ import {
   useDeleteOrganizationMutation,
   useGetOrganizationsQuery,
 } from '../../redux/api/organizationApiSlice';
-import useConfirmation from '../common/Confirmation/useConfirmation';
+import { useConfirmation } from '../common/Confirmation';
 import { DataTable } from '../common/DataTable';
 import OrganizationFormModal from './OrganizationFormModal';
 
