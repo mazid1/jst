@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import { MongooseModule } from '@nestjs/mongoose';
 import * as Joi from 'joi';
@@ -23,18 +23,21 @@ import { AppService } from './app.service';
         NX_JWT_ACCESS_TOKEN_EXPIRATION_TIME: Joi.number().required(),
         NX_JWT_REFRESH_TOKEN_SECRET: Joi.string().required(),
         NX_JWT_REFRESH_TOKEN_EXPIRATION_TIME: Joi.number().required(),
+        NX_MONGO_CONNECTION_STRING: Joi.string().required(),
       }),
     }),
-    MongooseModule.forRoot(
-      'mongodb://admin:pass1234@localhost:27017/jst?authMechanism=DEFAULT&authSource=admin',
-      {
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (config: ConfigService) => ({
+        uri: config.get('NX_MONGO_CONNECTION_STRING'),
         connectionFactory: (connection: Connection) => {
           // eslint-disable-next-line @typescript-eslint/no-var-requires
           connection.plugin(require('mongoose-autopopulate'));
           return connection;
         },
-      }
-    ),
+      }),
+    }),
     ApplicationsModule,
     AuthModule,
     OrganizationsModule,
