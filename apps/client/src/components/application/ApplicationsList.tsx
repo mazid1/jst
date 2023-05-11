@@ -1,8 +1,11 @@
 import { Spinner } from '@chakra-ui/react';
 
+import { createColumnHelper } from '@tanstack/react-table';
+import { Application } from '../../@types';
 import { useGetApplicationsQuery } from '../../redux/api/applicationApiSlice';
 import { DataTable } from '../common/DataTable';
-import { columns } from './columnDef';
+
+const { accessor: createColumn } = createColumnHelper<Application>();
 
 function ApplicationsList() {
   const {
@@ -11,6 +14,17 @@ function ApplicationsList() {
     isError,
     error,
   } = useGetApplicationsQuery();
+
+  const columns = [
+    createColumn('position', { header: 'Position' }),
+    createColumn('organization.name', { header: 'Company' }),
+    createColumn('location', { header: 'Location' }),
+    createColumn('status', { header: 'Status' }),
+    createColumn('interviews', {
+      header: 'Next Interview',
+      cell: (info) => info.getValue()?.at(0)?.dateTime,
+    }),
+  ];
 
   if (isSuccess) {
     return <DataTable columns={columns} data={applications} />;

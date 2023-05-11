@@ -101,7 +101,7 @@ function OrganizationsList() {
     }),
     createColumn('_id', {
       header: 'Actions',
-      cell: ({ getValue, row }) => {
+      cell: ({ row }) => {
         return (
           <Stack direction="row">
             <Tooltip label="Edit" aria-label="Edit">
