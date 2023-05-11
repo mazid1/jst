@@ -41,11 +41,10 @@ function OrganizationsList() {
     try {
       const isConfirmed = await ask({
         header: 'Delete Organization',
-        prompt:
+        message:
           'Do you want to delete this organization? This action can not be undone.',
         acceptButtonText: 'Delete',
         rejectButtonText: 'Cancel',
-        isOpen: true,
       });
       if (!isConfirmed) return;
 

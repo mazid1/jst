@@ -8,8 +8,8 @@ import {
 import { ConfirmationDialogState } from './types';
 
 export const defaultConfirmationDialogState: ConfirmationDialogState = {
-  header: '',
-  prompt: '',
+  header: 'Please Confirm',
+  message: 'Are you sure?',
   rejectButtonText: 'No',
   acceptButtonText: 'Yes',
   isOpen: false,

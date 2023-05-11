@@ -9,9 +9,15 @@ function useConfirmation() {
   const [confirm, setConfirm] = useContext(ConfirmContext);
   const [needsCleanup, setNeedsCleanup] = useState(false);
 
-  const ask = (dialogProps: DialogProps) => {
+  const ask = (dialogProps: Partial<DialogProps> = {}) => {
     const promise = new Promise((resolve, reject) => {
-      setConfirm({ ...dialogProps, isOpen: true, accept: resolve, reject });
+      setConfirm({
+        ...defaultConfirmationDialogState,
+        ...dialogProps,
+        isOpen: true,
+        accept: resolve,
+        reject,
+      });
       setNeedsCleanup(true);
     });
 

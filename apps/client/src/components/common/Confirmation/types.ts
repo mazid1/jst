@@ -1,6 +1,6 @@
 export type DialogProps = {
   header: string;
-  prompt: string;
+  message: string;
   rejectButtonText: string;
   acceptButtonText: string;
   isOpen: boolean;

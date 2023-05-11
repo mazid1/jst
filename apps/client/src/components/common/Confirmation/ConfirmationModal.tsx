@@ -14,7 +14,7 @@ function ConfirmationModal() {
   const {
     isOpen,
     header,
-    prompt,
+    message,
     acceptButtonText,
     rejectButtonText,
     accept,
@@ -34,7 +34,7 @@ function ConfirmationModal() {
             {header}
           </AlertDialogHeader>
 
-          <AlertDialogBody>{prompt}</AlertDialogBody>
+          <AlertDialogBody>{message}</AlertDialogBody>
 
           <AlertDialogFooter>
             <Button ref={cancelRef} onClick={reject}>
