@@ -5,6 +5,10 @@ import * as ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
+import {
+  ConfirmationContextProvider,
+  ConfirmationModal,
+} from './components/common/confirmation';
 import { store } from './redux/store';
 import theme from './theme';
 
@@ -20,7 +24,10 @@ root.render(
             initialColorMode={theme['config'].initialColorMode}
           />
           <BrowserRouter>
-            <App />
+            <ConfirmationContextProvider>
+              <App />
+              <ConfirmationModal />
+            </ConfirmationContextProvider>
           </BrowserRouter>
         </ChakraProvider>
       </GoogleOAuthProvider>

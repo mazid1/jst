@@ -10,7 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Organization } from '../../@types';
-import { ServerError } from '../../@types/serverError';
+import { handleError } from '../../helpers/handleError';
 import { asOptionalField } from '../../helpers/zodHelper';
 import {
   useCreateOrganizationMutation,
@@ -58,7 +58,7 @@ function OrganizationForm({ onSuccess, organization }: OrganizationFormProps) {
         ? await updateOrganization({ org: data, id: organization._id }).unwrap()
         : await createOrganization(data).unwrap();
       toast({
-        title: isUpdating ? 'Updated' : 'Created.',
+        title: isUpdating ? 'Updated.' : 'Created.',
         description: (
           <Text>
             <strong>{newOrganization.name}</strong> organization{' '}
@@ -70,19 +70,7 @@ function OrganizationForm({ onSuccess, organization }: OrganizationFormProps) {
       });
       onSuccess();
     } catch (error) {
-      const serverError = error as ServerError;
-      const { statusCode, message } = serverError;
-      if (statusCode !== 401) {
-        const description =
-          typeof message === 'string' ? message : message.join(', ');
-        toast({
-          title: 'Failed.',
-          description:
-            description || 'Unknown error occured, please try again.',
-          status: 'error',
-          isClosable: true,
-        });
-      }
+      handleError(error, toast);
     }
   };
 

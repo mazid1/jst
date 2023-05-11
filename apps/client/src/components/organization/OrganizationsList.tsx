@@ -4,14 +4,21 @@ import {
   Link,
   Spinner,
   Stack,
+  Text,
   Tooltip,
   useDisclosure,
+  useToast,
 } from '@chakra-ui/react';
 import { createColumnHelper } from '@tanstack/react-table';
 import { useState } from 'react';
 import { Organization } from '../../@types';
-import { useGetOrganizationsQuery } from '../../redux/api/organizationApiSlice';
+import { handleError } from '../../helpers/handleError';
+import {
+  useDeleteOrganizationMutation,
+  useGetOrganizationsQuery,
+} from '../../redux/api/organizationApiSlice';
 import { DataTable } from '../common/DataTable';
+import { useConfirmation } from '../common/confirmation';
 import OrganizationFormModal from './OrganizationFormModal';
 
 export const { accessor: createColumn } = createColumnHelper<Organization>();
@@ -23,9 +30,42 @@ function OrganizationsList() {
     isError,
     error,
   } = useGetOrganizationsQuery();
+  const [deleteOrganization] = useDeleteOrganizationMutation();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const toast = useToast();
+  const { ask } = useConfirmation();
+
   const [selectedOrg, setSelectedOrg] = useState<Organization>();
+
+  const handleDeleteOrganization = async (organization: Organization) => {
+    const { _id: id, name } = organization;
+    try {
+      const isConfirmed = await ask({
+        header: `Delete Organization`,
+        message: (
+          <Text>
+            Are you sure you want to delete <strong>{name}</strong>?
+            <br />
+            This action can not be undone.
+          </Text>
+        ),
+        acceptButtonText: 'Delete',
+        rejectButtonText: 'Cancel',
+      });
+      if (!isConfirmed) return;
+
+      await deleteOrganization(id);
+      toast({
+        title: 'Deleted.',
+        description: 'Organization is deleted successfully.',
+        status: 'success',
+        isClosable: true,
+      });
+    } catch (error) {
+      handleError(error, toast);
+    }
+  };
 
   const columns = [
     createColumn('name', { header: 'Name' }),
@@ -62,7 +102,6 @@ function OrganizationsList() {
     createColumn('_id', {
       header: 'Actions',
       cell: ({ getValue, row }) => {
-        const id = getValue();
         return (
           <Stack direction="row">
             <Tooltip label="Edit" aria-label="Edit">
@@ -82,7 +121,7 @@ function OrganizationsList() {
                 icon={<DeleteIcon />}
                 aria-label="Delete"
                 colorScheme="red"
-                onClick={() => console.log('Delete', id)}
+                onClick={() => handleDeleteOrganization(row.original)}
               />
             </Tooltip>
           </Stack>
