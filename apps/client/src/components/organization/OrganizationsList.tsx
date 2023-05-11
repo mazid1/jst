@@ -4,6 +4,7 @@ import {
   Link,
   Spinner,
   Stack,
+  Text,
   Tooltip,
   useDisclosure,
   useToast,
@@ -37,12 +38,18 @@ function OrganizationsList() {
 
   const [selectedOrg, setSelectedOrg] = useState<Organization>();
 
-  const handleDeleteOrganization = async (id: string) => {
+  const handleDeleteOrganization = async (organization: Organization) => {
+    const { _id: id, name } = organization;
     try {
       const isConfirmed = await ask({
-        header: 'Delete Organization',
-        message:
-          'Do you want to delete this organization? This action can not be undone.',
+        header: `Delete Organization`,
+        message: (
+          <Text>
+            Are you sure you want to delete <strong>{name}</strong>?
+            <br />
+            This action can not be undone.
+          </Text>
+        ),
         acceptButtonText: 'Delete',
         rejectButtonText: 'Cancel',
       });
@@ -95,7 +102,6 @@ function OrganizationsList() {
     createColumn('_id', {
       header: 'Actions',
       cell: ({ getValue, row }) => {
-        const id = getValue();
         return (
           <Stack direction="row">
             <Tooltip label="Edit" aria-label="Edit">
@@ -115,7 +121,7 @@ function OrganizationsList() {
                 icon={<DeleteIcon />}
                 aria-label="Delete"
                 colorScheme="red"
-                onClick={() => handleDeleteOrganization(id)}
+                onClick={() => handleDeleteOrganization(row.original)}
               />
             </Tooltip>
           </Stack>

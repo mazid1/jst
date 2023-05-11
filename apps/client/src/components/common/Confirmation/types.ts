@@ -1,8 +1,10 @@
+import { ReactNode } from 'react';
+
 export type DialogProps = {
-  header: string;
-  message: string;
-  rejectButtonText: string;
-  acceptButtonText: string;
+  header: string | ReactNode;
+  message: string | ReactNode;
+  rejectButtonText: string | ReactNode;
+  acceptButtonText: string | ReactNode;
   isOpen: boolean;
 };
 
