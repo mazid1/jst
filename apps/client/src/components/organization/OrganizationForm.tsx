@@ -76,9 +76,9 @@ function OrganizationForm({ onSuccess, organization }: OrganizationFormProps) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} id={ORGANIZATION_FORM_ID}>
-      <FormControl isInvalid={!!errors.name}>
+      <FormControl isInvalid={!!errors.name} isRequired>
         <FormLabel>Name</FormLabel>
-        <Input type="text" {...register('name', { required: true })} />
+        <Input type="text" {...register('name')} />
         <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
       </FormControl>
 
