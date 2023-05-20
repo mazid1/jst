@@ -3,7 +3,10 @@ import { ServerError } from '../@types/serverError';
 
 export function handleError(error: unknown, toast: CreateToastFnReturn) {
   const serverError = error as ServerError;
-  const { statusCode, message } = serverError;
+  const {
+    data: { statusCode, message },
+  } = serverError;
+
   if (statusCode !== 401) {
     const description =
       typeof message === 'string' ? message : message.join(', ');
