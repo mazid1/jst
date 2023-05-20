@@ -1,10 +1,9 @@
-export type ApplicationStatus = {
-  TODO: 'todo';
-  APPLIED: 'applied';
-  INTERVIEWING: 'interviewing';
-  NEGOTIATING: 'negotiating';
-  ACCEPTED: 'accepted';
-  REJECTED: 'rejected';
-  DENIED: 'denied';
-  ARCHAIVED: 'archaived';
-};
+export type ApplicationStatus =
+  | 'todo'
+  | 'applied'
+  | 'interviewing'
+  | 'negotiating'
+  | 'accepted'
+  | 'rejected'
+  | 'denied'
+  | 'archaived';
