@@ -10,7 +10,7 @@ const ApplicationsPage = () => {
 
   return (
     <>
-      <PageTitle title="Applications" />
+      <PageTitle title="Applications (Under construction)" />
       <Stack direction="row" justifyContent="end" mb={6}>
         <AddApplication />
       </Stack>
