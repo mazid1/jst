@@ -52,8 +52,6 @@ jobs:
           when: always
 
 workflows:
-  version: 2
-
   config:
     jobs:
       - agent:
