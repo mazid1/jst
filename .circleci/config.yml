@@ -47,6 +47,9 @@ jobs:
           name: Run build
           command: yarn nx affected --base=$NX_BASE --head=$NX_HEAD --target=build --parallel=3
       - run:
+          name: Run deploy
+          command: yarn nx affected --base=$NX_BASE --head=$NX_HEAD --target=deploy --parallel=3
+      - run:
           name: Stop all agents
           command: yarn nx-cloud stop-all-agents
           when: always
