@@ -24,6 +24,8 @@ jobs:
       - image: cimg/node:lts-browsers
     environment:
       NX_CLOUD_DISTRIBUTED_EXECUTION: 'true'
+      VERCEL_ORG_ID: $VERCEL_ORG_ID
+      VERCEL_PROJECT_ID: $VERCEL_PROJECT_ID
     steps:
       - checkout
       - run:
