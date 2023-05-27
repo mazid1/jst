@@ -6,7 +6,7 @@
   "targets": {
     "deploy": {
       "executor": "nx:run-commands",
-      "outputs": [".vercel/output"],
+      "outputs": ["{workspaceRoot}/.vercel/output"],
       "options": {
         "commands": [
           "echo Deploying Client App to Vercel",
@@ -91,7 +91,7 @@
     },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": ["coverage/apps/client"],
+      "outputs": ["{workspaceRoot}/coverage/apps/client"],
       "options": {
         "jestConfig": "apps/client/jest.config.ts",
         "passWithNoTests": true
