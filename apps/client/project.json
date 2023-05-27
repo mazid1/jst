@@ -4,6 +4,20 @@
   "sourceRoot": "apps/client/src",
   "projectType": "application",
   "targets": {
+    "deploy": {
+      "executor": "nx:run-commands",
+      "outputs": [".vercel/output"],
+      "options": {
+        "commands": [
+          "echo Deploying Client App to Vercel",
+          "vercel pull --yes --token $VERCEL_TOKEN",
+          "vercel build --prod --token $VERCEL_TOKEN",
+          "vercel deploy --prebuilt --prod --token $VERCEL_TOKEN"
+        ],
+        "parallel": false
+      },
+      "dependsOn": ["build"]
+    },
     "build": {
       "executor": "@nx/webpack:webpack",
       "outputs": ["{options.outputPath}"],
