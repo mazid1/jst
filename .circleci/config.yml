@@ -35,7 +35,7 @@ jobs:
           main-branch-name: 'main'
       - run:
           name: Initialize the Nx Cloud distributed CI run
-          command: yarn nx-cloud start-ci-run --stop-agents-after="build" --agent-count=3
+          command: yarn nx-cloud start-ci-run --stop-agents-after="deploy" --agent-count=3
       - run:
           name: Check format
           command: yarn nx-cloud record -- yarn nx format:check --base=$NX_BASE --head=$NX_HEAD
