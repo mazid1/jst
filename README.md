@@ -1,5 +1,7 @@
 # Jst
 
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/mazid1/jst/tree/main.svg?style=shield&circle-token=294022791b3c9a9a95c767a2cbc62748edf9549a)](https://dl.circleci.com/status-badge/redirect/gh/mazid1/jst/tree/main)
+
 This project was generated using [Nx](https://nx.dev).
 
 <p style="text-align: center;"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="450"></p>
