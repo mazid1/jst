@@ -10,9 +10,15 @@
       "options": {
         "commands": [
           "echo Deploying Client App to Vercel",
-          "vercel pull --yes --environment=production --token $VERCEL_TOKEN",
-          "vercel build --prod --token $VERCEL_TOKEN",
-          "vercel deploy --prebuilt --prod --token $VERCEL_TOKEN"
+          "vercel pull --yes --environment={args.environment} --token $VERCEL_TOKEN",
+          {
+            "command": "if [[ {args.environment} = preview ]]\nthen\nvercel build --token $VERCEL_TOKEN\nelse\nvercel build --prod --token $VERCEL_TOKEN\nfi",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "if [[ {args.environment} = preview ]]\nthen\nvercel deploy --prebuilt --token $VERCEL_TOKEN\nelse\nvercel deploy --prod --prebuilt --token $VERCEL_TOKEN\nfi",
+            "forwardAllArgs": false
+          }
         ],
         "parallel": false
       },
