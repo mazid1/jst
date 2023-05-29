@@ -55,14 +55,14 @@ jobs:
           steps:
             - run:
                 name: Run deploy preview
-                command: yarn nx affected --base=$NX_BASE --head=$NX_HEAD --target=deploy --parallel=3 --args='--environment=preview'
+                command: yarn nx affected --base=$NX_BASE --head=$NX_HEAD --target=deploy --parallel=3 --environment=preview
       - when:
           condition:
             equal: [main, << pipeline.git.branch >>]
           steps:
             - run:
                 name: Run deploy prod
-                command: yarn nx affected --base=$NX_BASE --head=$NX_HEAD --target=deploy --parallel=3 --args='--environment=production'
+                command: yarn nx affected --base=$NX_BASE --head=$NX_HEAD --target=deploy --parallel=3 --environment=production
       - run:
           name: Stop all agents
           command: yarn nx-cloud stop-all-agents
