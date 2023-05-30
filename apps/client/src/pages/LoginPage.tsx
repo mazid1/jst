@@ -30,6 +30,7 @@ const LoginPage = () => {
   return (
     <Center h="100vh">
       <GoogleSignInButton onClick={requestUserConsent} />
+      Test
     </Center>
   );
 };
