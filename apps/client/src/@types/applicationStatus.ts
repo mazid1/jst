@@ -5,5 +5,4 @@ export type ApplicationStatus =
   | 'negotiating'
   | 'accepted'
   | 'rejected'
-  | 'denied'
-  | 'archaived';
+  | 'denied';

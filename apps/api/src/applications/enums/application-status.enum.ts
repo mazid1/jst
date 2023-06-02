@@ -6,5 +6,4 @@ export enum ApplicationStatus {
   ACCEPTED = 'accepted',
   REJECTED = 'rejected',
   DENIED = 'denied',
-  ARCHAIVED = 'archaived',
 }
