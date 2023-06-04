@@ -36,4 +36,8 @@ export class Organization {
   isDeleted: boolean;
 }
 
-export const OrganizationSchema = SchemaFactory.createForClass(Organization);
+const OrganizationSchema = SchemaFactory.createForClass(Organization);
+
+OrganizationSchema.index({ name: 'text' });
+
+export { OrganizationSchema };
