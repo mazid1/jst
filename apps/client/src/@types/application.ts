@@ -1,4 +1,4 @@
-import { ApplicationStatus } from './applicationStatus';
+import { type ApplicationStatus } from '../components/application/applicationSchema';
 import { BaseEntity } from './baseEntity';
 import { Interview } from './interview';
 import { LinkData } from './linkData';

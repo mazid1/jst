@@ -8,7 +8,10 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { Select } from 'chakra-react-select';
+import capitalize from 'lodash/capitalize';
+import { useMemo } from 'react';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { Application } from '../../@types';
 import { handleError } from '../../helpers/handleError';
 import {
@@ -16,6 +19,7 @@ import {
   useUpdateApplicationMutation,
 } from '../../redux/api/applicationApiSlice';
 import {
+  ApplicationStatusEnum,
   CreateApplicationDto,
   applicationSchema,
   transformToCreateApplicationDto,
@@ -36,6 +40,7 @@ function ApplicationForm(props: ApplicationFormProps) {
     register,
     handleSubmit,
     formState: { errors },
+    control,
   } = useForm<CreateApplicationDto>({
     resolver: zodResolver(applicationSchema),
     values: createApplicationDto,
@@ -45,6 +50,15 @@ function ApplicationForm(props: ApplicationFormProps) {
   const [updateApplication] = useUpdateApplicationMutation();
 
   const toast = useToast();
+
+  const options = useMemo(
+    () =>
+      Object.values(ApplicationStatusEnum.Values).map((v) => ({
+        label: capitalize(v),
+        value: v,
+      })),
+    []
+  );
 
   const onSubmit: SubmitHandler<CreateApplicationDto> = async (data) => {
     const isUpdating = !!application;
@@ -87,11 +101,24 @@ function ApplicationForm(props: ApplicationFormProps) {
         <FormErrorMessage>{errors.description?.message}</FormErrorMessage>
       </FormControl>
 
-      <FormControl isInvalid={!!errors.status}>
-        <FormLabel>Application Status</FormLabel>
-        <Input type="text" {...register('status')} />
-        <FormErrorMessage>{errors.status?.message}</FormErrorMessage>
-      </FormControl>
+      <Controller
+        name="status"
+        control={control}
+        render={({ field: { name, onBlur, onChange, ref, value } }) => (
+          <FormControl isInvalid={!!errors.status}>
+            <FormLabel>Application Status</FormLabel>
+            <Select
+              name={name}
+              onBlur={onBlur}
+              onChange={(v) => onChange(v?.value)}
+              ref={ref}
+              value={options.find((o) => o.value === value)}
+              options={options}
+            />
+            <FormErrorMessage>{errors.status?.message}</FormErrorMessage>
+          </FormControl>
+        )}
+      />
 
       <FormControl isInvalid={!!errors.location}>
         <FormLabel>Job Location</FormLabel>

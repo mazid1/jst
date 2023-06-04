@@ -1,5 +1,5 @@
+export { ApplicationStatus } from '../components/application/applicationSchema';
 export { Application } from './application';
-export { ApplicationStatus } from './applicationStatus';
 export { Interview } from './interview';
 export { LinkData } from './linkData';
 export {

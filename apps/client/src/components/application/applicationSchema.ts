@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { Application } from '../../@types';
 import { asOptionalField } from '../../helpers/zodHelper';
 
-const ApplicationStatusEnum = z.enum([
+export const ApplicationStatusEnum = z.enum([
   'todo',
   'applied',
   'interviewing',
@@ -10,8 +10,9 @@ const ApplicationStatusEnum = z.enum([
   'accepted',
   'rejected',
   'denied',
-  'archaived',
 ]);
+
+export type ApplicationStatus = z.infer<typeof ApplicationStatusEnum>;
 
 export const applicationSchema = z.object({
   position: z.string().nonempty('Job Title is required'),
