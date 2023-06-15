@@ -32,7 +32,12 @@ function ApplicationFormModal(props: ApplicationFormModalProps) {
   } = props;
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false}>
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      closeOnOverlayClick={false}
+      scrollBehavior="inside"
+    >
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>{headerText}</ModalHeader>

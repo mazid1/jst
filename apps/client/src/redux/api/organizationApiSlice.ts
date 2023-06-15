@@ -4,6 +4,7 @@ import {
   UpdateOrganizationDto,
 } from '../../@types';
 import { apiSlice } from './apiSlice';
+import { OrganizationFilterQuery as OrganizationFilter } from './types/OrganizationFilterQuery';
 
 export const organizationApiSlice = apiSlice.injectEndpoints({
   endpoints: (build) => ({
@@ -16,6 +17,16 @@ export const organizationApiSlice = apiSlice.injectEndpoints({
         })),
         { type: 'ORGANIZATION', id: 'LIST' },
       ],
+    }),
+    getOrganizationsFiltered: build.query<Organization[], OrganizationFilter>({
+      query: (filterQuery: OrganizationFilter) => {
+        const filterParams = (
+          Object.keys(filterQuery) as (keyof OrganizationFilter)[]
+        )
+          .map((key: keyof OrganizationFilter) => `${key}=${filterQuery[key]}`)
+          .join('&');
+        return `/organizations/filter?${filterParams}`;
+      },
     }),
     getOrganization: build.query<Organization, string>({
       query: (organizationId) => `/organizatins/${organizationId}`,
@@ -54,6 +65,8 @@ export const organizationApiSlice = apiSlice.injectEndpoints({
 
 export const {
   useGetOrganizationsQuery,
+  useGetOrganizationsFilteredQuery,
+  useLazyGetOrganizationsFilteredQuery,
   useGetOrganizationQuery,
   useCreateOrganizationMutation,
   useUpdateOrganizationMutation,

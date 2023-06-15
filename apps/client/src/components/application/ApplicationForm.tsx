@@ -8,7 +8,7 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Select } from 'chakra-react-select';
+import { AsyncCreatableSelect, Select } from 'chakra-react-select';
 import capitalize from 'lodash/capitalize';
 import { useMemo } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
@@ -18,6 +18,10 @@ import {
   useCreateApplicationMutation,
   useUpdateApplicationMutation,
 } from '../../redux/api/applicationApiSlice';
+import {
+  useGetOrganizationsFilteredQuery,
+  useLazyGetOrganizationsFilteredQuery,
+} from '../../redux/api/organizationApiSlice';
 import {
   ApplicationStatusEnum,
   CreateApplicationDto,
@@ -48,6 +52,25 @@ function ApplicationForm(props: ApplicationFormProps) {
 
   const [createApplication] = useCreateApplicationMutation();
   const [updateApplication] = useUpdateApplicationMutation();
+  const [getFilteredOrganizations] = useLazyGetOrganizationsFilteredQuery();
+  const { data: organizations } = useGetOrganizationsFilteredQuery({
+    name: '',
+  });
+
+  const defaultOrgsOptions =
+    organizations?.map((o) => ({ label: o.name, value: o._id })) ?? [];
+
+  const loadOptions = async (inputValue: string) => {
+    try {
+      const filteredOrgs = await getFilteredOrganizations({
+        name: inputValue,
+      }).unwrap();
+      return filteredOrgs?.map((o) => ({ label: o.name, value: o._id })) ?? [];
+    } catch (error) {
+      console.log(error);
+      return [];
+    }
+  };
 
   const toast = useToast();
 
@@ -102,6 +125,27 @@ function ApplicationForm(props: ApplicationFormProps) {
       </FormControl>
 
       <Controller
+        name="organization"
+        control={control}
+        render={({ field: { name, onBlur, onChange, ref, value } }) => (
+          <FormControl isInvalid={!!errors.organization}>
+            <FormLabel>Company Name</FormLabel>
+            <AsyncCreatableSelect
+              ref={ref}
+              name={name}
+              onBlur={onBlur}
+              onChange={(v) => onChange(v?.value)}
+              value={defaultOrgsOptions.find((o) => o.value === value)}
+              cacheOptions
+              defaultOptions={defaultOrgsOptions}
+              loadOptions={loadOptions}
+            />
+            <FormErrorMessage>{errors.organization?.message}</FormErrorMessage>
+          </FormControl>
+        )}
+      />
+
+      <Controller
         name="status"
         control={control}
         render={({ field: { name, onBlur, onChange, ref, value } }) => (
@@ -142,13 +186,6 @@ function ApplicationForm(props: ApplicationFormProps) {
         <FormLabel>Notes</FormLabel>
         <Textarea {...register('notes')} />
         <FormErrorMessage>{errors.notes?.message}</FormErrorMessage>
-      </FormControl>
-
-      {/* TODO: use search and select, with a way to create new organization */}
-      <FormControl isInvalid={!!errors.organization}>
-        <FormLabel>Company Name</FormLabel>
-        <Input type="text" {...register('organization')} />
-        <FormErrorMessage>{errors.organization?.message}</FormErrorMessage>
       </FormControl>
     </form>
   );
