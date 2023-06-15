@@ -20,7 +20,10 @@ import {
   useCreateApplicationMutation,
   useUpdateApplicationMutation,
 } from '../../redux/api/applicationApiSlice';
-import { useLazyGetOrganizationsFilteredQuery } from '../../redux/api/organizationApiSlice';
+import {
+  useCreateOrganizationMutation,
+  useLazyGetOrganizationsFilteredQuery,
+} from '../../redux/api/organizationApiSlice';
 import {
   ApplicationStatusEnum,
   CreateApplicationDto,
@@ -35,13 +38,17 @@ export type ApplicationFormProps = {
   application?: Application;
 };
 
+const mapOrganizationToSelectOption = (
+  org: Organization
+): SelectOption<string> => ({
+  label: org.name,
+  value: org._id,
+});
+
 const mapOrganizationsToSelectOptions = (
   organizations: Organization[]
 ): SelectOption<string>[] => {
-  return organizations.map((org) => ({
-    label: org.name,
-    value: org._id,
-  }));
+  return organizations.map(mapOrganizationToSelectOption);
 };
 
 function ApplicationForm(props: ApplicationFormProps) {
@@ -60,6 +67,7 @@ function ApplicationForm(props: ApplicationFormProps) {
 
   const [createApplication] = useCreateApplicationMutation();
   const [updateApplication] = useUpdateApplicationMutation();
+  const [createOrganization] = useCreateOrganizationMutation();
   const [getFilteredOrganizations] = useLazyGetOrganizationsFilteredQuery();
 
   const toast = useToast();
@@ -87,6 +95,25 @@ function ApplicationForm(props: ApplicationFormProps) {
     },
     300
   );
+
+  const handleCreateOrganization = async (
+    name: string,
+    onChange: (...event: any[]) => void
+  ) => {
+    const newOrg = await createOrganization({ name }).unwrap();
+    const newOption = mapOrganizationToSelectOption(newOrg);
+    onChange(newOption.value);
+    toast({
+      title: 'Created.',
+      description: (
+        <Text>
+          <strong>{newOrg.name}</strong> organization {'created'}.
+        </Text>
+      ),
+      status: 'success',
+      isClosable: true,
+    });
+  };
 
   const onSubmit: SubmitHandler<CreateApplicationDto> = async (data) => {
     const isUpdating = !!application;
@@ -143,6 +170,9 @@ function ApplicationForm(props: ApplicationFormProps) {
               cacheOptions
               defaultOptions
               loadOptions={loadOrganizationOptions}
+              onCreateOption={(input: string) =>
+                handleCreateOrganization(input, onChange)
+              }
             />
             <FormErrorMessage>{errors.organization?.message}</FormErrorMessage>
           </FormControl>
