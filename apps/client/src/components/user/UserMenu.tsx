@@ -14,12 +14,11 @@ import {
 } from '@chakra-ui/react';
 import { FiChevronDown } from 'react-icons/fi';
 import { useLogoutMutation } from '../../redux/api/authApiSlice';
-import { useAppSelector } from '../../redux/hooks';
-import { selectCurrentUser } from '../../redux/slices/userSlice';
+import { useGetMeQuery } from '../../redux/api/userApiSlice';
 
 const UserMenu = () => {
   const [logout] = useLogoutMutation();
-  const user = useAppSelector(selectCurrentUser);
+  const { data: user } = useGetMeQuery();
 
   const startLogout = async () => {
     try {
