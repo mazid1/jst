@@ -107,7 +107,8 @@ function ApplicationForm(props: ApplicationFormProps) {
       title: 'Created.',
       description: (
         <Text>
-          <strong>{newOrg.name}</strong> organization {'created'}.
+          <strong>{newOrg.name}</strong> organization {'created'}. Now you can
+          search and select this organization.
         </Text>
       ),
       status: 'success',
