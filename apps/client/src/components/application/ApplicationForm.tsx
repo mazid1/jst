@@ -10,18 +10,17 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AsyncCreatableSelect, Select } from 'chakra-react-select';
 import capitalize from 'lodash/capitalize';
+import debounce from 'lodash/debounce';
 import { useMemo } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { Application } from '../../@types';
+import { Application, Organization } from '../../@types';
+import { SelectOption } from '../../@types/SelectOption';
 import { handleError } from '../../helpers/handleError';
 import {
   useCreateApplicationMutation,
   useUpdateApplicationMutation,
 } from '../../redux/api/applicationApiSlice';
-import {
-  useGetOrganizationsFilteredQuery,
-  useLazyGetOrganizationsFilteredQuery,
-} from '../../redux/api/organizationApiSlice';
+import { useLazyGetOrganizationsFilteredQuery } from '../../redux/api/organizationApiSlice';
 import {
   ApplicationStatusEnum,
   CreateApplicationDto,
@@ -34,6 +33,15 @@ export const APPLICATION_FORM_ID = 'applicationForm';
 export type ApplicationFormProps = {
   onSuccess: () => void;
   application?: Application;
+};
+
+const mapOrganizationsToSelectOptions = (
+  organizations: Organization[]
+): SelectOption<string>[] => {
+  return organizations.map((org) => ({
+    label: org.name,
+    value: org._id,
+  }));
 };
 
 function ApplicationForm(props: ApplicationFormProps) {
@@ -53,34 +61,31 @@ function ApplicationForm(props: ApplicationFormProps) {
   const [createApplication] = useCreateApplicationMutation();
   const [updateApplication] = useUpdateApplicationMutation();
   const [getFilteredOrganizations] = useLazyGetOrganizationsFilteredQuery();
-  const { data: organizations } = useGetOrganizationsFilteredQuery({
-    name: '',
-  });
-
-  const defaultOrgsOptions =
-    organizations?.map((o) => ({ label: o.name, value: o._id })) ?? [];
-
-  const loadOptions = async (inputValue: string) => {
-    try {
-      const filteredOrgs = await getFilteredOrganizations({
-        name: inputValue,
-      }).unwrap();
-      return filteredOrgs?.map((o) => ({ label: o.name, value: o._id })) ?? [];
-    } catch (error) {
-      console.log(error);
-      return [];
-    }
-  };
 
   const toast = useToast();
 
-  const options = useMemo(
+  const applicationStatusOptions = useMemo(
     () =>
       Object.values(ApplicationStatusEnum.Values).map((v) => ({
         label: capitalize(v),
         value: v,
       })),
     []
+  );
+
+  const loadOrganizationOptions = debounce(
+    (
+      inputValue: string,
+      callback: (options: SelectOption<string>[]) => void
+    ) => {
+      getFilteredOrganizations({ name: inputValue })
+        .unwrap()
+        .then((orgs) => callback(mapOrganizationsToSelectOptions(orgs)))
+        .catch((err) => {
+          callback([] as SelectOption<string>[]);
+        });
+    },
+    300
   );
 
   const onSubmit: SubmitHandler<CreateApplicationDto> = async (data) => {
@@ -135,10 +140,9 @@ function ApplicationForm(props: ApplicationFormProps) {
               name={name}
               onBlur={onBlur}
               onChange={(v) => onChange(v?.value)}
-              value={defaultOrgsOptions.find((o) => o.value === value)}
               cacheOptions
-              defaultOptions={defaultOrgsOptions}
-              loadOptions={loadOptions}
+              defaultOptions
+              loadOptions={loadOrganizationOptions}
             />
             <FormErrorMessage>{errors.organization?.message}</FormErrorMessage>
           </FormControl>
@@ -156,8 +160,8 @@ function ApplicationForm(props: ApplicationFormProps) {
               onBlur={onBlur}
               onChange={(v) => onChange(v?.value)}
               ref={ref}
-              value={options.find((o) => o.value === value)}
-              options={options}
+              value={applicationStatusOptions.find((o) => o.value === value)}
+              options={applicationStatusOptions}
             />
             <FormErrorMessage>{errors.status?.message}</FormErrorMessage>
           </FormControl>
