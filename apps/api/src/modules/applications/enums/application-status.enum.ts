@@ -1,9 +1,9 @@
 export enum ApplicationStatus {
-  TODO = 'todo',
-  APPLIED = 'applied',
-  INTERVIEWING = 'interviewing',
-  NEGOTIATING = 'negotiating',
-  ACCEPTED = 'accepted',
-  REJECTED = 'rejected',
-  DENIED = 'denied',
+  Todo = 'Todo',
+  Applied = 'Applied',
+  Interviewing = 'Interviewing',
+  Negotiating = 'Negotiating',
+  Accepted = 'Accepted',
+  Rejected = 'Rejected',
+  Denied = 'Denied',
 }

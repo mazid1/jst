@@ -23,7 +23,7 @@ export class CreateApplicationDto {
 
   @IsEnum(ApplicationStatus)
   @IsNotEmpty()
-  status: ApplicationStatus = ApplicationStatus.TODO;
+  status: ApplicationStatus = ApplicationStatus.Todo;
 
   @IsOptional()
   @IsString()
