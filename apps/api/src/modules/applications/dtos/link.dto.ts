@@ -9,3 +9,5 @@ export class LinkDto {
   @IsUrl()
   url: string;
 }
+
+export type Link = LinkDto;

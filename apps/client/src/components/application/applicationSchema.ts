@@ -3,13 +3,13 @@ import { Application } from '../../@types';
 import { asOptionalField } from '../../helpers/zodHelper';
 
 export const ApplicationStatusEnum = z.enum([
-  'todo',
-  'applied',
-  'interviewing',
-  'negotiating',
-  'accepted',
-  'rejected',
-  'denied',
+  'Todo',
+  'Applied',
+  'Interviewing',
+  'Negotiating',
+  'Accepted',
+  'Rejected',
+  'Denied',
 ]);
 
 export type ApplicationStatus = z.infer<typeof ApplicationStatusEnum>;

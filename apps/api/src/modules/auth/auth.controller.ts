@@ -9,14 +9,14 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { Request } from 'express';
-import MongooseClassSerializerInterceptor from '../interceptors/mongoose-class-serializer.interceptor';
+import MongooseClassSerializerInterceptor from '../../interceptors/mongoose-class-serializer.interceptor';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { AuthService } from './auth.service';
 import { CodeDto } from './dtos/code.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import JwtRefreshGuard from './guards/jwt-refresh.guard';
-import RequestWithUser from './interfaces/request-with-user.interface';
+import { RequestWithUser } from './types/request-with-user';
 
 @Controller('auth')
 export class AuthController {

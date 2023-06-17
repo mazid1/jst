@@ -3,8 +3,8 @@ import { Transform, Type } from 'class-transformer';
 import mongoose, { Document } from 'mongoose';
 import { Interview } from '../../interviews/entities/interview.entity';
 import { Organization } from '../../organizations/entities/organization.entity';
+import { Link } from '../dtos/link.dto';
 import { ApplicationStatus } from '../enums/application-status.enum';
-import { Link } from '../interfaces/link.interface';
 
 export type ApplicationDocument = Application & Document;
 
@@ -28,7 +28,7 @@ export class Application {
     required: true,
     enum: ApplicationStatus,
     type: String,
-    default: ApplicationStatus.TODO,
+    default: ApplicationStatus.Todo,
     index: true,
   })
   status: ApplicationStatus;
