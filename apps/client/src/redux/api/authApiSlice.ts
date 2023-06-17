@@ -1,6 +1,5 @@
 import { User } from '../../@types';
 import { history } from '../../helpers/history';
-import { resetUser } from '../slices/userSlice';
 import { apiSlice } from './apiSlice';
 import { userApiSlice } from './userApiSlice';
 
@@ -15,10 +14,9 @@ export const authApiSlice = apiSlice.injectEndpoints({
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled;
-          await dispatch(userApiSlice.endpoints.me.initiate());
+          await dispatch(userApiSlice.endpoints.getMe.initiate());
         } catch (e) {
           console.log('failed to login', e);
-          dispatch(resetUser());
         }
       },
     }),
@@ -38,7 +36,6 @@ export const authApiSlice = apiSlice.injectEndpoints({
         } finally {
           // reset redux states
           dispatch(apiSlice.util.resetApiState());
-          dispatch(resetUser());
         }
       },
     }),

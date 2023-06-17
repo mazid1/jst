@@ -9,7 +9,7 @@ const HomePage = () => {
   const dispatch = useAppDispatch();
 
   const getProfile = async () => {
-    const response = await dispatch(userApiSlice.endpoints.me.initiate());
+    const response = await dispatch(userApiSlice.endpoints.getMe.initiate());
     if (response.data) {
       console.log('Profile', response.data);
     } else if (response.error) {

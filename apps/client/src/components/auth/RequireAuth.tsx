@@ -2,7 +2,7 @@ import { Progress } from '@chakra-ui/react';
 import { ReactJSXElement } from '@emotion/react/types/jsx-namespace';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { history } from '../../helpers/history';
-import { useMeQuery } from '../../redux/api/userApiSlice';
+import { useGetMeQuery } from '../../redux/api/userApiSlice';
 
 interface Props {
   children?: ReactJSXElement;
@@ -10,7 +10,7 @@ interface Props {
 
 const RequireAuth = ({ children }: Props) => {
   history.location = useLocation();
-  const { isLoading, data: user } = useMeQuery();
+  const { isLoading, data: user } = useGetMeQuery();
 
   if (isLoading) return <Progress size="xs" isIndeterminate />;
 
