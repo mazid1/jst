@@ -12,10 +12,10 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { FilterOrganization } from './@type';
 import { CreateOrganizationDto } from './dtos/create-organization.dto';
 import { UpdateOrganizationDto } from './dtos/update-organization.dto';
 import { OrganizationsService } from './organizations.service';
+import { FilterOrganization } from './types/filter-organization';
 
 @UseGuards(JwtAuthGuard)
 @Controller('organizations')

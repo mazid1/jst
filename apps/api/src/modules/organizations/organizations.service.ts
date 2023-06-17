@@ -1,10 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { FilterOrganization } from './@type';
 import { CreateOrganizationDto } from './dtos/create-organization.dto';
 import { UpdateOrganizationDto } from './dtos/update-organization.dto';
 import { Organization } from './entities/organization.entity';
+import { FilterOrganization } from './types/filter-organization';
 
 @Injectable()
 export class OrganizationsService {

@@ -7,7 +7,7 @@ import { CreateGoogleUserDto } from '../users/dtos/create-google-user.dto';
 import { GoogleUsersService } from '../users/google-users.service';
 import { UsersService } from '../users/users.service';
 import { CodeDto } from './dtos/code.dto';
-import { TokenPayloadDto } from './dtos/token-playload.dto';
+import { TokenPayload } from './types/token-playload';
 
 @Injectable()
 export class AuthService {
@@ -63,7 +63,7 @@ export class AuthService {
   }
 
   getCookieWithAccessToken(userId: string) {
-    const payload: TokenPayloadDto = { userId };
+    const payload: TokenPayload = { userId };
     const token = this.jwtService.sign(payload);
     return `Authentication=${token}; HttpOnly; Path=/; Secure; Max-Age=${this.configService.get(
       'NX_JWT_ACCESS_TOKEN_EXPIRATION_TIME'
@@ -71,7 +71,7 @@ export class AuthService {
   }
 
   getCookieWithRefreshToken(userId: string) {
-    const payload: TokenPayloadDto = { userId };
+    const payload: TokenPayload = { userId };
     const token = this.jwtService.sign(payload, {
       secret: this.configService.get('NX_JWT_REFRESH_TOKEN_SECRET'),
       expiresIn: `${this.configService.get(

@@ -16,7 +16,7 @@ import { AuthService } from './auth.service';
 import { CodeDto } from './dtos/code.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import JwtRefreshGuard from './guards/jwt-refresh.guard';
-import RequestWithUser from './interfaces/request-with-user.interface';
+import { RequestWithUser } from './types/request-with-user';
 
 @Controller('auth')
 export class AuthController {
