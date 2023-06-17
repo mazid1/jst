@@ -1,8 +1,8 @@
-import { JwtService } from '@nestjs/jwt';
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
 import { Auth, google } from 'googleapis';
-import { EnvironmentVariables } from '../config/environment-variables.interface';
+import { EnvironmentVariables } from '../../config/environment-variables.interface';
 import { CreateGoogleUserDto } from '../users/dtos/create-google-user.dto';
 import { GoogleUsersService } from '../users/google-users.service';
 import { UsersService } from '../users/users.service';

@@ -9,7 +9,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { Request } from 'express';
-import MongooseClassSerializerInterceptor from '../interceptors/mongoose-class-serializer.interceptor';
+import MongooseClassSerializerInterceptor from '../../interceptors/mongoose-class-serializer.interceptor';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { AuthService } from './auth.service';

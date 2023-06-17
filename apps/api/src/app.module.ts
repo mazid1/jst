@@ -4,10 +4,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import * as Joi from 'joi';
 import { Connection } from 'mongoose';
-import { ApplicationsModule } from './applications/applications.module';
-import { AuthModule } from './auth/auth.module';
-import { InterviewsModule } from './interviews/interviews.module';
-import { OrganizationsModule } from './organizations/organizations.module';
+import { ApplicationsModule } from './modules/applications/applications.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { InterviewsModule } from './modules/interviews/interviews.module';
+import { OrganizationsModule } from './modules/organizations/organizations.module';
 
 @Module({
   imports: [

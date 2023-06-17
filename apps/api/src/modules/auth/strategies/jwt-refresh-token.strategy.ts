@@ -1,10 +1,10 @@
-import { ExtractJwt, Strategy } from 'passport-jwt';
-import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { PassportStrategy } from '@nestjs/passport';
 import { Request } from 'express';
+import { ExtractJwt, Strategy } from 'passport-jwt';
+import { EnvironmentVariables } from '../../../config/environment-variables.interface';
 import { UsersService } from '../../users/users.service';
-import { EnvironmentVariables } from '../../config/environment-variables.interface';
 import { TokenPayloadDto } from '../dtos/token-playload.dto';
 
 @Injectable()
