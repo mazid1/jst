@@ -25,7 +25,7 @@ export const applicationSchema = z.object({
       url: asOptionalField(z.string().nonempty()),
     })
     .optional(),
-  appliedDate: asOptionalField(z.date()),
+  appliedDate: asOptionalField(z.coerce.date()),
   notes: asOptionalField(z.string()),
   organization: asOptionalField(z.string()),
 });
