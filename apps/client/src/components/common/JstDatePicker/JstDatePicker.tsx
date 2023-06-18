@@ -7,7 +7,7 @@ import './jst-date-picker.css';
 export type JSTDatePickerProps = ReactDatePickerProps;
 
 export const JSTDatePicker = forwardRef<ReactDatePicker, JSTDatePickerProps>(
-  ({ ...props }, ref) => {
+  function JSTDatePicker({ ...props }, ref) {
     return (
       <ReactDatePicker
         ref={ref}
