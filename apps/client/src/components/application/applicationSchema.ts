@@ -42,7 +42,9 @@ export function transformToCreateApplicationDto(
     status: application.status,
     location: application.location,
     source: { ...application.source },
-    appliedDate: application.appliedDate,
+    appliedDate: application.appliedDate
+      ? new Date(application.appliedDate)
+      : new Date(),
     notes: application.notes,
     organization: application.organization?._id,
   };
