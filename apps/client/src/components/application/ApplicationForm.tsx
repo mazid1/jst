@@ -24,6 +24,7 @@ import {
   useCreateOrganizationMutation,
   useLazyGetOrganizationsFilteredQuery,
 } from '../../redux/api/organizationApiSlice';
+import { JSTDatePicker } from '../common/JstDatePicker/JstDatePicker';
 import {
   ApplicationStatusEnum,
   CreateApplicationDto,
@@ -53,7 +54,10 @@ const mapOrganizationsToSelectOptions = (
 
 function ApplicationForm(props: ApplicationFormProps) {
   const { onSuccess, application } = props;
-  const createApplicationDto = transformToCreateApplicationDto(application);
+  const createApplicationDto = useMemo(
+    () => transformToCreateApplicationDto(application),
+    [application]
+  );
 
   const {
     register,
@@ -211,11 +215,23 @@ function ApplicationForm(props: ApplicationFormProps) {
         <FormErrorMessage>{errors.source?.url?.message}</FormErrorMessage>
       </FormControl>
 
-      <FormControl isInvalid={!!errors.appliedDate}>
-        <FormLabel>Applied Date</FormLabel>
-        <Input type="date" {...register('appliedDate')} />
-        <FormErrorMessage>{errors.appliedDate?.message}</FormErrorMessage>
-      </FormControl>
+      <Controller
+        name="appliedDate"
+        control={control}
+        render={({ field: { name, onBlur, onChange, ref, value } }) => (
+          <FormControl isInvalid={!!errors.appliedDate}>
+            <FormLabel>Applied Date</FormLabel>
+            <JSTDatePicker
+              ref={ref}
+              name={name}
+              selected={value}
+              onChange={(date) => onChange(date)}
+              onBlur={onBlur}
+            />
+            <FormErrorMessage>{errors.appliedDate?.message}</FormErrorMessage>
+          </FormControl>
+        )}
+      />
 
       <FormControl isInvalid={!!errors.notes}>
         <FormLabel>Notes</FormLabel>
