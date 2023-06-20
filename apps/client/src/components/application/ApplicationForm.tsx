@@ -22,6 +22,7 @@ import {
 } from '../../redux/api/applicationApiSlice';
 import {
   useCreateOrganizationMutation,
+  useGetOrganizationsFilteredQuery,
   useLazyGetOrganizationsFilteredQuery,
 } from '../../redux/api/organizationApiSlice';
 import { JSTDatePicker } from '../common/JstDatePicker/JstDatePicker';
@@ -68,6 +69,14 @@ function ApplicationForm(props: ApplicationFormProps) {
     resolver: zodResolver(applicationSchema),
     values: createApplicationDto,
   });
+
+  const { data: organizations } = useGetOrganizationsFilteredQuery({
+    name: '',
+  });
+  const defaultOrganizationOptions: SelectOption<string>[] = useMemo(
+    () => (organizations ? mapOrganizationsToSelectOptions(organizations) : []),
+    [organizations]
+  );
 
   const [createApplication] = useCreateApplicationMutation();
   const [updateApplication] = useUpdateApplicationMutation();
@@ -172,12 +181,13 @@ function ApplicationForm(props: ApplicationFormProps) {
               name={name}
               onBlur={onBlur}
               onChange={(v) => onChange(v?.value)}
-              cacheOptions
-              defaultOptions
+              value={defaultOrganizationOptions?.find((o) => o.value === value)}
+              defaultOptions={defaultOrganizationOptions}
               loadOptions={loadOrganizationOptions}
               onCreateOption={(input: string) =>
                 handleCreateOrganization(input, onChange)
               }
+              cacheOptions
             />
             <FormErrorMessage>{errors.organization?.message}</FormErrorMessage>
           </FormControl>
