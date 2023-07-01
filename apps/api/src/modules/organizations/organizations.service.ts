@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { PaginatedResponse } from '../../common/PaginaedResponse';
 import { CreateOrganizationDto } from './dtos/create-organization.dto';
 import { UpdateOrganizationDto } from './dtos/update-organization.dto';
 import { Organization } from './entities/organization.entity';
@@ -13,8 +14,32 @@ export class OrganizationsService {
     private readonly organizationModel: Model<Organization>
   ) {}
 
-  findAll() {
-    return this.organizationModel.find({ isDeleted: false }).exec();
+  async findAll(
+    skip = 0,
+    limit = 10,
+    filter = {},
+    sort = {}
+  ): Promise<PaginatedResponse<Organization>> {
+    const resultArr = await this.organizationModel
+      .aggregate([
+        { $match: { ...filter, isDeleted: false } },
+        { $sort: { ...sort, createdAt: -1 } },
+        { $facet: { data: [], total: [{ $count: 'createdAt' }] } },
+        { $unwind: '$total' },
+        {
+          $project: {
+            data: { $slice: ['$data', skip, limit] },
+            meta: {
+              totalDocuments: '$total.createdAt',
+              currentPage: { $literal: skip / limit + 1 },
+              totalPages: { $ceil: { $divide: ['$total.createdAt', limit] } },
+              pageSize: { $literal: limit },
+            },
+          },
+        },
+      ])
+      .exec();
+    return resultArr.at(0);
   }
 
   filterBy({ name }: FilterOrganization) {
