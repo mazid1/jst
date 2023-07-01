@@ -3,20 +3,28 @@ import {
   Organization,
   UpdateOrganizationDto,
 } from '../../@types';
+import { PaginatedResponse } from '../../@types/PaginatedResponse';
+import { PaginationQuery } from '../../@types/PaginationQuery';
 import { apiSlice } from './apiSlice';
 import { OrganizationFilterQuery as OrganizationFilter } from './types/OrganizationFilterQuery';
 
 export const organizationApiSlice = apiSlice.injectEndpoints({
   endpoints: (build) => ({
-    getOrganizations: build.query<Organization[], void>({
-      query: () => '/organizations',
-      providesTags: (result = [], error, arg) => [
-        ...result.map(({ _id }) => ({
-          type: 'ORGANIZATION' as const,
-          id: _id,
-        })),
-        { type: 'ORGANIZATION', id: 'LIST' },
-      ],
+    getOrganizations: build.query<
+      PaginatedResponse<Organization>,
+      PaginationQuery
+    >({
+      query: ({ skip, limit }) => `/organizations?skip=${skip}&limit=${limit}`,
+      providesTags: (result, error, arg) =>
+        result
+          ? [
+              ...result.data.map(({ _id }) => ({
+                type: 'ORGANIZATION' as const,
+                id: _id,
+              })),
+              { type: 'ORGANIZATION', id: 'PARTIAL-LIST' },
+            ]
+          : [{ type: 'ORGANIZATION', id: 'PARTIAL-LIST' }],
     }),
     getOrganizationsFiltered: build.query<Organization[], OrganizationFilter>({
       query: (filterQuery: OrganizationFilter) => {
@@ -38,7 +46,7 @@ export const organizationApiSlice = apiSlice.injectEndpoints({
         method: 'POST',
         body: initialOrganization,
       }),
-      invalidatesTags: [{ type: 'ORGANIZATION', id: 'LIST' }],
+      invalidatesTags: [{ type: 'ORGANIZATION', id: 'PARTIAL-LIST' }],
     }),
     updateOrganization: build.mutation<
       Organization,
@@ -58,7 +66,7 @@ export const organizationApiSlice = apiSlice.injectEndpoints({
         url: `/organizations/${organizationId}`,
         method: 'DELETE',
       }),
-      invalidatesTags: [{ type: 'ORGANIZATION', id: 'LIST' }],
+      invalidatesTags: [{ type: 'ORGANIZATION', id: 'PARTIAL-LIST' }],
     }),
   }),
 });

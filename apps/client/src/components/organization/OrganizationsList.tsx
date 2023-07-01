@@ -23,13 +23,17 @@ import OrganizationFormModal from './OrganizationFormModal';
 
 export const { accessor: createColumn } = createColumnHelper<Organization>();
 
+const PAGE_SIZE = 10;
+
 function OrganizationsList() {
+  const [page, setPage] = useState(0);
+
   const {
     data: organizations,
     isSuccess,
     isError,
     error,
-  } = useGetOrganizationsQuery();
+  } = useGetOrganizationsQuery({ skip: page * PAGE_SIZE, limit: PAGE_SIZE });
   const [deleteOrganization] = useDeleteOrganizationMutation();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -133,7 +137,7 @@ function OrganizationsList() {
   if (isSuccess) {
     return (
       <>
-        <DataTable columns={columns} data={organizations} />
+        <DataTable columns={columns} data={organizations.data} />
         <OrganizationFormModal
           isOpen={isOpen}
           onClose={onClose}
