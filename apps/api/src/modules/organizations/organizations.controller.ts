@@ -11,6 +11,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
+import { PaginationParams } from '../../common/PaginationParams';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CreateOrganizationDto } from './dtos/create-organization.dto';
 import { UpdateOrganizationDto } from './dtos/update-organization.dto';
@@ -23,8 +24,9 @@ export class OrganizationsController {
   constructor(private readonly organizationsService: OrganizationsService) {}
 
   @Get()
-  findAll() {
-    return this.organizationsService.findAll();
+  findAll(@Query() paginationParams: PaginationParams) {
+    const { skip, limit } = paginationParams;
+    return this.organizationsService.findAll(skip, limit);
   }
 
   @Get('filter')
