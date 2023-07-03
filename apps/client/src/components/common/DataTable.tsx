@@ -56,50 +56,50 @@ export function DataTable<Data extends object>({
   });
 
   const paginationButtons = useMemo(() => {
-    if (pageInfo) {
-      const { currentPage: currentPageLabel, totalPages, pageSize } = pageInfo;
-      const currentPageValue = currentPageLabel - 1;
+    if (!pageInfo) return [];
 
-      const minPageLabel = Math.max(1, currentPageLabel - 2);
-      const minPageValue = minPageLabel - 1;
+    const { currentPage: currentPageLabel, totalPages, pageSize } = pageInfo;
+    const currentPageValue = currentPageLabel - 1;
 
-      const maxPageLabel = Math.min(totalPages, currentPageLabel + 2);
-      const maxPageValue = maxPageLabel - 1;
+    const minPageLabel = Math.max(1, currentPageLabel - 2);
+    const minPageValue = minPageLabel - 1;
 
-      const numberButtonsLabel = range(minPageLabel, maxPageLabel + 1);
-      const pageButtonsLabel = ['<<', '<', ...numberButtonsLabel, '>', '>>'];
+    const maxPageLabel = Math.min(totalPages, currentPageLabel + 2);
+    const maxPageValue = maxPageLabel - 1;
 
-      const buttonList = pageButtonsLabel.map((label) => {
-        if (label === '<<')
+    const numberButtonsLabel = range(minPageLabel, maxPageLabel + 1);
+    const pageButtonsLabel = ['<<', '<', ...numberButtonsLabel, '>', '>>'];
+
+    return pageButtonsLabel.map((label) => {
+      switch (label) {
+        case '<<':
           return {
             label,
             skip: 0,
           };
-        if (label === '<')
+        case '<':
           return {
             label,
             skip: Math.max(currentPageValue - 1, minPageValue) * pageSize,
           };
-        if (label === '>')
+        case '>':
           return {
             label,
             skip: Math.min(currentPageValue + 1, maxPageValue) * pageSize,
           };
-        if (label === '>>')
+        case '>>':
           return {
             label,
             skip: (totalPages - 1) * pageSize,
           };
-        return {
-          label,
-          skip: (Number(label) - 1) * pageSize,
-        };
-      });
-      return buttonList;
-    } else return [];
+        default:
+          return {
+            label,
+            skip: (Number(label) - 1) * pageSize,
+          };
+      }
+    });
   }, [pageInfo]);
-
-  console.log({ pageInfo, paginationButtons });
 
   return (
     <TableContainer>
