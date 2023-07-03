@@ -26,14 +26,14 @@ export const { accessor: createColumn } = createColumnHelper<Organization>();
 const PAGE_SIZE = 10;
 
 function OrganizationsList() {
-  const [page, setPage] = useState(0);
+  const [skip, setSkip] = useState(0);
 
   const {
-    data: organizations,
+    data: pageResponse,
     isSuccess,
     isError,
     error,
-  } = useGetOrganizationsQuery({ skip: page * PAGE_SIZE, limit: PAGE_SIZE });
+  } = useGetOrganizationsQuery({ skip, limit: PAGE_SIZE });
   const [deleteOrganization] = useDeleteOrganizationMutation();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -69,6 +69,10 @@ function OrganizationsList() {
     } catch (error) {
       handleError(error, toast);
     }
+  };
+
+  const handlePageChange = (newSkip: number) => {
+    setSkip(newSkip);
   };
 
   const columns = [
@@ -137,7 +141,12 @@ function OrganizationsList() {
   if (isSuccess) {
     return (
       <>
-        <DataTable columns={columns} data={organizations.data} />
+        <DataTable
+          columns={columns}
+          data={pageResponse.data}
+          pageInfo={pageResponse.meta}
+          onPageChange={handlePageChange}
+        />
         <OrganizationFormModal
           isOpen={isOpen}
           onClose={onClose}

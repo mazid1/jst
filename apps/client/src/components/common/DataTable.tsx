@@ -1,5 +1,8 @@
 import { TriangleDownIcon, TriangleUpIcon } from '@chakra-ui/icons';
 import {
+  Button,
+  Center,
+  Stack,
   Table,
   TableContainer,
   Tbody,
@@ -17,16 +20,28 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { useState } from 'react';
+import { range } from 'lodash';
+import { useMemo, useState } from 'react';
+
+export type PageInfo = {
+  pageSize: number;
+  currentPage: number;
+  totalPages: number;
+  totalDocuments: number;
+};
 
 export type DataTableProps<Data extends object> = {
   data: Data[];
   columns: ColumnDef<Data, any>[];
+  pageInfo?: PageInfo;
+  onPageChange?: (skip: number) => void;
 };
 
 export function DataTable<Data extends object>({
   data,
   columns,
+  pageInfo,
+  onPageChange,
 }: DataTableProps<Data>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const table = useReactTable({
@@ -39,6 +54,52 @@ export function DataTable<Data extends object>({
       sorting,
     },
   });
+
+  const paginationButtons = useMemo(() => {
+    if (pageInfo) {
+      const { currentPage: currentPageLabel, totalPages, pageSize } = pageInfo;
+      const currentPageValue = currentPageLabel - 1;
+
+      const minPageLabel = Math.max(1, currentPageLabel - 2);
+      const minPageValue = minPageLabel - 1;
+
+      const maxPageLabel = Math.min(totalPages, currentPageLabel + 2);
+      const maxPageValue = maxPageLabel - 1;
+
+      const numberButtonsLabel = range(minPageLabel, maxPageLabel + 1);
+      const pageButtonsLabel = ['<<', '<', ...numberButtonsLabel, '>', '>>'];
+
+      const buttonList = pageButtonsLabel.map((label) => {
+        if (label === '<<')
+          return {
+            label,
+            skip: 0,
+          };
+        if (label === '<')
+          return {
+            label,
+            skip: Math.max(currentPageValue - 1, minPageValue) * pageSize,
+          };
+        if (label === '>')
+          return {
+            label,
+            skip: Math.min(currentPageValue + 1, maxPageValue) * pageSize,
+          };
+        if (label === '>>')
+          return {
+            label,
+            skip: (totalPages - 1) * pageSize,
+          };
+        return {
+          label,
+          skip: (Number(label) - 1) * pageSize,
+        };
+      });
+      return buttonList;
+    } else return [];
+  }, [pageInfo]);
+
+  console.log({ pageInfo, paginationButtons });
 
   return (
     <TableContainer>
@@ -91,6 +152,27 @@ export function DataTable<Data extends object>({
           ))}
         </Tbody>
       </Table>
+      {paginationButtons.length > 0 && (
+        <Center>
+          <Stack direction="row" my={4}>
+            {paginationButtons.map((b) => (
+              <Button
+                key={b.label}
+                onClick={() => onPageChange?.(b.skip)}
+                isDisabled={
+                  pageInfo?.currentPage === b.label ||
+                  (pageInfo?.currentPage === 1 &&
+                    ['<', '<<'].includes(String(b.label))) ||
+                  (pageInfo?.currentPage === pageInfo?.totalPages &&
+                    ['>', '>>'].includes(String(b.label)))
+                }
+              >
+                {b.label}
+              </Button>
+            ))}
+          </Stack>
+        </Center>
+      )}
     </TableContainer>
   );
 }
