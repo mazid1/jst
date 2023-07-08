@@ -23,14 +23,20 @@ import ApplicationFormModal from './ApplicationFormModal';
 
 const { accessor: createColumn } = createColumnHelper<Application>();
 
+const PAGE_SIZE = 10;
+
 function ApplicationsList() {
+  // states
+  const [selectedApplication, setSelectedApplication] = useState<Application>();
+  const [skip, setSkip] = useState(0);
+
   // query
   const {
-    data: applications,
+    data: pageResponse,
     isSuccess,
     isError,
     error,
-  } = useGetApplicationsQuery();
+  } = useGetApplicationsQuery({ skip, limit: PAGE_SIZE });
 
   // mutation
   const [deleteApplication] = useDeleteApplicationMutation();
@@ -39,9 +45,6 @@ function ApplicationsList() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
   const { ask } = useConfirmation();
-
-  // states
-  const [selectedApplication, setSelectedApplication] = useState<Application>();
 
   // handlers
   const handleDeleteApplication = async (application: Application) => {
@@ -124,7 +127,12 @@ function ApplicationsList() {
   if (isSuccess) {
     return (
       <>
-        <DataTable columns={columns} data={applications} />
+        <DataTable
+          columns={columns}
+          data={pageResponse.data}
+          pageInfo={pageResponse.meta}
+          onPageChange={setSkip}
+        />
         <ApplicationFormModal
           isOpen={isOpen}
           onClose={onClose}

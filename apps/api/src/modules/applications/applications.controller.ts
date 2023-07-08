@@ -8,8 +8,10 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
+import { PaginationParams } from '../../common/PaginationParams';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { ApplicationsService } from './applications.service';
 import { CreateApplicationDto } from './dtos/create-application.dto';
@@ -21,8 +23,9 @@ export class ApplicationsController {
   constructor(private readonly applicationsService: ApplicationsService) {}
 
   @Get()
-  findAll() {
-    return this.applicationsService.findAll();
+  findAll(@Query() paginationParams: PaginationParams) {
+    const { skip, limit } = paginationParams;
+    return this.applicationsService.findAll(skip, limit);
   }
 
   @Get(':id/interviews')

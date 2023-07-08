@@ -12,8 +12,27 @@ export class ApplicationsService {
     private readonly applicationModel: Model<Application>
   ) {}
 
-  findAll() {
-    return this.applicationModel.find().exec();
+  async findAll(skip = 0, limit = 10, filter = {}, sort = {}) {
+    const resultArr = await this.applicationModel
+      .aggregate([
+        { $match: { ...filter } },
+        { $sort: { ...sort, updatedAt: -1 } },
+        { $facet: { data: [], total: [{ $count: 'updatedAt' }] } },
+        { $unwind: '$total' },
+        {
+          $project: {
+            data: { $slice: ['$data', skip, limit] },
+            meta: {
+              totalDocuments: '$total.updatedAt',
+              currentPage: { $literal: skip / limit + 1 },
+              totalPages: { $ceil: { $divide: ['$total.updatedAt', limit] } },
+              pageSize: { $literal: limit },
+            },
+          },
+        },
+      ])
+      .exec();
+    return resultArr.at(0);
   }
 
   async findById(id: string) {

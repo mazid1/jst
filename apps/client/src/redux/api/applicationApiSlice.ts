@@ -1,4 +1,6 @@
 import { Application } from '../../@types';
+import { PaginatedResponse } from '../../@types/PaginatedResponse';
+import { PaginationQuery } from '../../@types/PaginationQuery';
 import { CreateApplicationDto } from '../../components/application/applicationSchema';
 import { apiSlice } from './apiSlice';
 
@@ -11,15 +13,21 @@ const urlPrefix = '/applications';
 
 export const applicationApiSlice = apiSlice.injectEndpoints({
   endpoints: (build) => ({
-    getApplications: build.query<Application[], void>({
-      query: () => urlPrefix,
-      providesTags: (result = [], error, arg) => [
-        ...result.map(({ _id }) => ({
-          type: 'APPLICATION' as const,
-          id: _id,
-        })),
-        { type: 'APPLICATION', id: 'LIST' },
-      ],
+    getApplications: build.query<
+      PaginatedResponse<Application>,
+      PaginationQuery
+    >({
+      query: ({ skip, limit }) => `${urlPrefix}?skip=${skip}&limit=${limit}`,
+      providesTags: (result, error, arg) =>
+        result
+          ? [
+              ...result.data.map(({ _id }) => ({
+                type: 'APPLICATION' as const,
+                id: _id,
+              })),
+              { type: 'APPLICATION', id: 'PARTIAL-LIST' },
+            ]
+          : [{ type: 'APPLICATION', id: 'PARTIAL-LIST' }],
     }),
     getApplication: build.query<Application, string>({
       query: (applicationId) => `${urlPrefix}/${applicationId}`,
@@ -31,7 +39,7 @@ export const applicationApiSlice = apiSlice.injectEndpoints({
         method: 'POST',
         body: initialApplication,
       }),
-      invalidatesTags: [{ type: 'APPLICATION', id: 'LIST' }],
+      invalidatesTags: [{ type: 'APPLICATION', id: 'PARTIAL-LIST' }],
     }),
     updateApplication: build.mutation<Application, UpdateApplicationPayload>({
       query: (data) => ({
@@ -48,7 +56,7 @@ export const applicationApiSlice = apiSlice.injectEndpoints({
         url: `${urlPrefix}/${applicationId}`,
         method: 'DELETE',
       }),
-      invalidatesTags: [{ type: 'APPLICATION', id: 'LIST' }],
+      invalidatesTags: [{ type: 'APPLICATION', id: 'PARTIAL-LIST' }],
     }),
   }),
 });
