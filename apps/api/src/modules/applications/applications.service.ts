@@ -17,7 +17,35 @@ export class ApplicationsService {
       .aggregate([
         { $match: { ...filter } },
         { $sort: { ...sort, createdAt: -1 } },
-        { $facet: { data: [], total: [{ $count: 'createdAt' }] } },
+        {
+          $facet: {
+            data: [
+              {
+                $lookup: {
+                  from: 'organizations',
+                  localField: 'organization',
+                  foreignField: '_id',
+                  as: 'organization',
+                },
+              },
+              {
+                $unwind: {
+                  path: '$organization',
+                  preserveNullAndEmptyArrays: true,
+                },
+              },
+              {
+                $project: {
+                  'organization.createdAt': 0,
+                  'organization.updatedAt': 0,
+                  'organization.isDeleted': 0,
+                  'organization.__v': 0,
+                },
+              },
+            ],
+            total: [{ $count: 'createdAt' }],
+          },
+        },
         { $unwind: '$total' },
         {
           $project: {
