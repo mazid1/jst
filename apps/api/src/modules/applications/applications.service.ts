@@ -16,16 +16,16 @@ export class ApplicationsService {
     const resultArr = await this.applicationModel
       .aggregate([
         { $match: { ...filter } },
-        { $sort: { ...sort, updatedAt: -1 } },
-        { $facet: { data: [], total: [{ $count: 'updatedAt' }] } },
+        { $sort: { ...sort, createdAt: -1 } },
+        { $facet: { data: [], total: [{ $count: 'createdAt' }] } },
         { $unwind: '$total' },
         {
           $project: {
             data: { $slice: ['$data', skip, limit] },
             meta: {
-              totalDocuments: '$total.updatedAt',
+              totalDocuments: '$total.createdAt',
               currentPage: { $literal: skip / limit + 1 },
-              totalPages: { $ceil: { $divide: ['$total.updatedAt', limit] } },
+              totalPages: { $ceil: { $divide: ['$total.createdAt', limit] } },
               pageSize: { $literal: limit },
             },
           },
