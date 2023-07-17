@@ -2,6 +2,7 @@ import { Route, Routes, useNavigate } from 'react-router-dom';
 import RequireAuth from './components/auth/RequireAuth';
 import Sidebar from './components/layout/Sidebar';
 import { history } from './helpers/history';
+import ApplicationDetailPage from './pages/ApplicationDetailPage';
 import ApplicationsPage from './pages/ApplicationsPage';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
@@ -21,6 +22,10 @@ export function App() {
         }
       >
         <Route path="/applications" element={<ApplicationsPage />} />
+        <Route
+          path="/applications/:applicationId"
+          element={<ApplicationDetailPage />}
+        />
         <Route path="/organizations" element={<OrganizationsPage />} />
         <Route path="/" element={<HomePage />} />
       </Route>

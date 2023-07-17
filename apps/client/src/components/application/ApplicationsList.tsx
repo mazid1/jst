@@ -9,8 +9,10 @@ import {
 } from '@chakra-ui/react';
 
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons';
+import { Link } from '@chakra-ui/react';
 import { createColumnHelper } from '@tanstack/react-table';
 import { useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import { Application } from '../../@types';
 import { handleError } from '../../helpers/handleError';
 import {
@@ -85,7 +87,14 @@ function ApplicationsList() {
   };
 
   const columns = [
-    createColumn('position', { header: 'Position' }),
+    createColumn('position', {
+      header: 'Position',
+      cell: ({ row }) => (
+        <Link as={RouterLink} to={row.original._id} color="teal">
+          {row.original.position}
+        </Link>
+      ),
+    }),
     createColumn('organization.name', { header: 'Company' }),
     createColumn('location', { header: 'Location' }),
     createColumn('status', { header: 'Status' }),
